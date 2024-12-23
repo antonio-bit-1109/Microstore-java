@@ -78,47 +78,6 @@ public class UserController {
         }
     }
 
-    // soft delete utente (isactive = false)
-    @GetMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<MessageResp> SoftDelete(@PathVariable Long id) {
-        try {
-
-            Optional<Users> optionalUser = userServices.findUserbyId(id);
-
-            userServices.softDelete(optionalUser);
-            return new ResponseEntity<>(new MessageResp("utente cancellato con successo."), HttpStatus.OK);
-
-
-        } catch (RuntimeException ex) {
-            return new ResponseEntity<>(new MessageResp("errore durante la cancellazione dell'utente: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
-    // riattivazione account (isactive = true)
-    @GetMapping("/reactivated/{id}")
-    public ResponseEntity<MessageResp> reactivateAccount(@PathVariable Long id) {
-
-        try {
-
-            Optional<Users> user = userServices.findUserbyId(id);
-            int res = userServices.Reactivate(user);
-
-            return switch (res) {
-                case 0 -> new ResponseEntity<>(new MessageResp("nessun utente trovato."), HttpStatus.NOT_FOUND);
-                case 1 ->
-                        new ResponseEntity<>(new MessageResp("L'utente selezionato risulta già attivo."), HttpStatus.OK);
-                case 2 -> new ResponseEntity<>(new MessageResp("Account riattivato con successo."), HttpStatus.OK);
-                default -> throw new RuntimeException("risposta imprevista dal servizio di riattivazione dell utente.");
-            };
-
-        } catch (RuntimeException ex) {
-
-            return new ResponseEntity<>(new MessageResp("errore durante la reattivazione dell'utente: " + ex), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
 
     // posso accedere a questo endpoint solo se sto facendo la get dei dati del mio stesso account
     @GetMapping("/get/{id}")

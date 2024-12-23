@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,24 +33,17 @@ public class UserServices implements IUserService {
         this.mapper = mapper;
     }
 
+    // get di tutti gli utenti -- solo admin puo farlo
+    public List<StandardUserDTO> prendiTuttiUtenti() {
 
-//    public String autenticate(String email, String password) {
-//        Optional<Users> user = userRepository.findByEmail(email);
-//
-//        if (user.isEmpty()) {
-//            throw new RuntimeException("utente non trovato. Email o password errate.");
-//        }
-//
-//        Users presentUser = user.get();
-//
-//        if (this.passwordEncoder.matches(password.trim(), presentUser.normalizedPassword())) {
-//            // generiamo il token jwt da reinviare al client
-//            return JwtUtil.generateToken(presentUser);
-//
-//        } else {
-//            throw new RuntimeException("Nome utente o password errata.");
-//        }
-//    }
+        List<StandardUserDTO> listaUtentiDTO = new ArrayList<>();
+        List<Users> listaUtenti = userRepository.findAll();
+
+        for (Users utente : listaUtenti) {
+            listaUtentiDTO.add(mapper.mapperUserDTO(utente.getName(), utente.getEmail(), utente.getPhone(), utente.getIsActive()));
+        }
+        return listaUtentiDTO;
+    }
 
     public Optional<Users> findUserbyId(Long id) {
         return userRepository.findById(id);

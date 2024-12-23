@@ -38,8 +38,8 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             String role = jwtUtil.getRoleFromToken(token);
             String userId = jwtUtil.getIdFromToken(token);
 
-            if (username.isEmpty() || role.isEmpty()) {
-                throw new RuntimeException("dati estratti dal token : username o ruolo sono vuoti.");
+            if (username.isEmpty() || role.isEmpty() || userId.isEmpty()) {
+                throw new RuntimeException("qualcuno dei dati estratti dal token risulta privo di valore o null.");
             }
 
             if (SecurityContextHolder.getContext().getAuthentication() == null) {

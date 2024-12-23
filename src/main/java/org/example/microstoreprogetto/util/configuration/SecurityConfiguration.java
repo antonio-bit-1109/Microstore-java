@@ -32,32 +32,13 @@ public class SecurityConfiguration {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login", "/users/register").permitAll()
-                        .requestMatchers("/order/create").hasRole("ADMIN") // questo dovrebbe essere il valore salvato nel token, controlla anche se maiuscolo o minuscolo
+                        .requestMatchers("/admin/**").hasRole("ADMIN") // questo dovrebbe essere il valore salvato nel token, controlla anche se maiuscolo o minuscolo
                         .anyRequest().authenticated())
                 .addFilterBefore(new JWTAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .csrf(csrf -> csrf.disable()) // Disabilita CSRF per API RESTful
-//                .authorizeHttpRequests(auth -> auth
-//
-//                                .requestMatchers("/auth/login", "/users/register").permitAll()
-//                                .requestMatchers("/order/create").hasRole("ADMIN")
-//                                .anyRequest().authenticated()// Endpoint di autenticazione pubblici
-//
-//
-//                        //    .anyRequest().permitAll()
-//                )
-//                .sessionManagement(session ->
-//                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));// Stateless per JWT
-//        .addFilterBefore(new JWTAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class); // Aggiungi filtro JWT
-//
-//        return http.build();
-//    }
-
-
+    
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
