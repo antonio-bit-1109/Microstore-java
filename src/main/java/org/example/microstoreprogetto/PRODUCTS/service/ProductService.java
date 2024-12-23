@@ -10,7 +10,10 @@ import org.example.microstoreprogetto.util.enums.categoryproduct.CategoryProduct
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService implements IProductService {
@@ -108,5 +111,28 @@ public class ProductService implements IProductService {
         Products prodottoTrovato = optionalProducts.get();
         prodottoTrovato.setIs_active(false);
         productRepository.save(prodottoTrovato);
+    }
+
+    public List<StandardProductDTO> GetTuttiProdotti() {
+        List<StandardProductDTO> listaProdottiDTO = new ArrayList<>();
+
+        List<Products> listaProdottiDB = productRepository.findAll();
+
+//        return listaProdottiDB.stream().map(prodEntity -> new StandardProductDTO(
+//                prodEntity.getName(),
+//                prodEntity.getCategory(),
+//                Float.toString(prodEntity.getPrice()),
+//                prodEntity.getDescription(),
+//                Integer.toString(prodEntity.getStock()),
+//                prodEntity.getIs_active()
+//        )).collect(Collectors.toList());
+
+        for (Products prod : listaProdottiDB) {
+            listaProdottiDTO.add(mapper.MapperProductDto(prod.getName(), prod.getCategory(), Float.toString(prod.getPrice()),
+                    prod.getDescription(), Integer.toString(prod.getStock()), prod.getIs_active()));
+
+        }
+
+        return listaProdottiDTO;
     }
 }

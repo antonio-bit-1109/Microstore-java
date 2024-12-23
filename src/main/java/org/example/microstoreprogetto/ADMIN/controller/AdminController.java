@@ -1,9 +1,12 @@
 package org.example.microstoreprogetto.ADMIN.controller;
 
+import org.example.microstoreprogetto.ADMIN.service.AdminService;
+import org.example.microstoreprogetto.PRODUCTS.DTO.StandardProductDTO;
 import org.example.microstoreprogetto.USERS.DTO.StandardUserDTO;
 import org.example.microstoreprogetto.USERS.entity.Users;
 import org.example.microstoreprogetto.USERS.service.UserServices;
 import org.example.microstoreprogetto.util.customResponse.general.MessageResp;
+import org.example.microstoreprogetto.util.customResponse.product.AllProductsAndMsg;
 import org.example.microstoreprogetto.util.customResponse.user.AllUsersAndMsg;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +26,11 @@ import java.util.Optional;
 public class AdminController {
 
     private final UserServices userServices;
+    private final AdminService adminService;
 
-    public AdminController(UserServices userServices) {
+    public AdminController(UserServices userServices, AdminService adminService) {
         this.userServices = userServices;
+        this.adminService = adminService;
     }
 
     // soft delete utente (isactive = false)
@@ -82,4 +87,6 @@ public class AdminController {
 
         }
     }
+
+
 }

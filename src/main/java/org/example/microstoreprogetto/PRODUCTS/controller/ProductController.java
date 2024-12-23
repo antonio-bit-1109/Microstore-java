@@ -8,6 +8,7 @@ import org.example.microstoreprogetto.PRODUCTS.DTO.StandardProductDTO;
 import org.example.microstoreprogetto.PRODUCTS.service.ProductService;
 import org.example.microstoreprogetto.util.customResponse.general.MessageResp;
 
+import org.example.microstoreprogetto.util.customResponse.product.AllProductsAndMsg;
 import org.example.microstoreprogetto.util.customResponse.product.ProductMesgResponse;
 import org.modelmapper.internal.asm.tree.TryCatchBlockNode;
 import org.springframework.http.HttpStatus;
@@ -97,4 +98,17 @@ public class ProductController {
         }
     }
 
+    // get di tutti i prodotti nel db
+    @GetMapping("/get-all")
+    public ResponseEntity<AllProductsAndMsg> getAllProdotti() {
+        try {
+
+            List<StandardProductDTO> listaProdottiDTO = this.productService.GetTuttiProdotti();
+            return new ResponseEntity<>(new AllProductsAndMsg(listaProdottiDTO, "Lista Tutti prodotti acquisita con successo."), HttpStatus.OK);
+
+        } catch (RuntimeException ex) {
+
+            return new ResponseEntity<>(new AllProductsAndMsg(null, "errore durante la get di tutti i prodotti: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
