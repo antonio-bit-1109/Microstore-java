@@ -31,14 +31,17 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/users/register").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // questo dovrebbe essere il valore salvato nel token, controlla anche se maiuscolo o minuscolo
-                        .anyRequest().authenticated())
+
+//                        .requestMatchers("/auth/login", "/users/register").permitAll()
+//                        .requestMatchers("/admin/**").hasRole("ADMIN") // questo dovrebbe essere il valore salvato nel token, controlla anche se maiuscolo o minuscolo
+//                        .anyRequest().authenticated())
+
+                        .anyRequest().permitAll())
                 .addFilterBefore(new JWTAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-    
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

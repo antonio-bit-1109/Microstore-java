@@ -18,6 +18,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -98,17 +99,17 @@ public class ProductController {
         }
     }
 
-    // get di tutti i prodotti nel db
+
     @GetMapping("/get-all")
-    public ResponseEntity<AllProductsAndMsg> getAllProdotti() {
+    public ResponseEntity<AllProductsAndMsg> getAllProducts() {
         try {
 
-            List<StandardProductDTO> listaProdottiDTO = this.productService.GetTuttiProdotti();
-            return new ResponseEntity<>(new AllProductsAndMsg(listaProdottiDTO, "Lista Tutti prodotti acquisita con successo."), HttpStatus.OK);
+            List<StandardProductDTO> listaProdottiDTO = productService.GetTuttiProdotti();
+            return new ResponseEntity<>(new AllProductsAndMsg(listaProdottiDTO, "prodotti ottenuti con successo"), HttpStatus.OK);
 
         } catch (RuntimeException ex) {
 
-            return new ResponseEntity<>(new AllProductsAndMsg(null, "errore durante la get di tutti i prodotti: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new AllProductsAndMsg(null, "Errore durante la get di tutti i prodotti : " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

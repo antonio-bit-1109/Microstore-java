@@ -1,6 +1,6 @@
 package org.example.microstoreprogetto.ADMIN.controller;
 
-import org.example.microstoreprogetto.ADMIN.service.AdminService;
+
 import org.example.microstoreprogetto.PRODUCTS.DTO.StandardProductDTO;
 import org.example.microstoreprogetto.USERS.DTO.StandardUserDTO;
 import org.example.microstoreprogetto.USERS.entity.Users;
@@ -26,11 +26,11 @@ import java.util.Optional;
 public class AdminController {
 
     private final UserServices userServices;
-    private final AdminService adminService;
 
-    public AdminController(UserServices userServices, AdminService adminService) {
+
+    public AdminController(UserServices userServices) {
         this.userServices = userServices;
-        this.adminService = adminService;
+     
     }
 
     // soft delete utente (isactive = false)

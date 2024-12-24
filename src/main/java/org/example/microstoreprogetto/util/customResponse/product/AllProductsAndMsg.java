@@ -23,4 +23,12 @@ public class AllProductsAndMsg {
         setMsg(msg);
         setListaProdotti(listaProd);
     }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public List<StandardProductDTO> getListaProdotti() {
+        return listaProdotti;
+    }
 }

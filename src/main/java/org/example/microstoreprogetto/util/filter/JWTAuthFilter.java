@@ -39,7 +39,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             String userId = jwtUtil.getIdFromToken(token);
 
             if (username == null || role == null || userId == null) {
-                throw new RuntimeException("qualcuno dei dati estratti dal token risulta privo di valore o null.");
+                System.out.println(" ERRORE: qualcuno dei dati estratti dal token risulta privo di valore o null.");
             }
 
             if (SecurityContextHolder.getContext().getAuthentication() == null) {
