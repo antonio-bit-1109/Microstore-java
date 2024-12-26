@@ -26,4 +26,4 @@
 - [] crea un controller per quegli endpoint richiamabili sono dagli admin
 - [] fai le varie getall di un po tutte le entity
 - [] crea un adminService dal quale richiamare i repository
-- [] get tutti prodotti non funziona, PERCHE ?? 
+- [] completa i metodi del mapper per generare DTO usando reflection

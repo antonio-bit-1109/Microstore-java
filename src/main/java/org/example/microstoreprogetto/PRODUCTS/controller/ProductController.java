@@ -6,6 +6,7 @@ import org.example.microstoreprogetto.PRODUCTS.DTO.AddStockProductDTO;
 import org.example.microstoreprogetto.PRODUCTS.DTO.CreateProductDTO;
 import org.example.microstoreprogetto.PRODUCTS.DTO.StandardProductDTO;
 import org.example.microstoreprogetto.PRODUCTS.service.ProductService;
+import org.example.microstoreprogetto.util.base_dto.BaseDTO;
 import org.example.microstoreprogetto.util.customResponse.general.MessageResp;
 
 import org.example.microstoreprogetto.util.customResponse.product.AllProductsAndMsg;
@@ -37,9 +38,9 @@ public class ProductController {
     public ResponseEntity<MessageResp> insertProdotto(@Valid @RequestBody CreateProductDTO productData) {
         try {
 
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String username = authentication.getName();
-            Collection<? extends GrantedAuthority> ruoli = authentication.getAuthorities();
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            String username = authentication.getName();
+//            Collection<? extends GrantedAuthority> ruoli = authentication.getAuthorities();
 
             this.productService.productCreation(productData);
             return new ResponseEntity<>(new MessageResp("prodotto creato con successo"), HttpStatus.OK);
@@ -58,7 +59,7 @@ public class ProductController {
         try {
 
 
-            StandardProductDTO prod = this.productService.addStockQuantity(addStockData);
+            BaseDTO prod = this.productService.addStockQuantity(addStockData);
             return new ResponseEntity<>(new ProductMesgResponse(prod, "quantità prodotto aggiornata con successo."), HttpStatus.OK);
 
         } catch (RuntimeException ex) {
@@ -73,7 +74,7 @@ public class ProductController {
     public ResponseEntity<ProductMesgResponse> getProdotto(@NotNull @PathVariable Long id) {
         try {
 
-            StandardProductDTO prod = this.productService.getProduct(id);
+            BaseDTO prod = this.productService.getProduct(id);
             return new ResponseEntity<>(new ProductMesgResponse(prod, "Prodotto recuperato con successo"), HttpStatus.OK);
 
         } catch (RuntimeException ex) {
@@ -104,7 +105,7 @@ public class ProductController {
     public ResponseEntity<AllProductsAndMsg> getAllProducts() {
         try {
 
-            List<StandardProductDTO> listaProdottiDTO = productService.GetTuttiProdotti();
+            List<BaseDTO> listaProdottiDTO = productService.GetTuttiProdotti();
             return new ResponseEntity<>(new AllProductsAndMsg(listaProdottiDTO, "prodotti ottenuti con successo"), HttpStatus.OK);
 
         } catch (RuntimeException ex) {

@@ -3,12 +3,13 @@ package org.example.microstoreprogetto.CARTS.entity;
 import jakarta.persistence.*;
 import org.example.microstoreprogetto.CART_ITEMS.entity.Cart_items;
 import org.example.microstoreprogetto.USERS.entity.Users;
+import org.example.microstoreprogetto.util.base_entity.BaseEntity;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
-public class Carts {
+public class Carts extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,13 +22,13 @@ public class Carts {
     // relazione many to one tanti, cart, potenzialmente un solo utente.
     // la chiave esterna user_id viene gestita automaticamente. non è necessario specificarla.
     @ManyToOne
-    @JoinColumn(name = "user_id" , nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
     //relazione uno a molti tra Carts e cart_items
     // un cart puo avere molti cart items
-    @OneToMany(mappedBy = "carts" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private  List<Cart_items> cartItems;
+    @OneToMany(mappedBy = "carts", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cart_items> cartItems;
 
 
     public void setId(Long id) {

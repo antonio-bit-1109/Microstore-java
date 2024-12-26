@@ -2,20 +2,21 @@ package org.example.microstoreprogetto.util.customResponse.user;
 
 import org.example.microstoreprogetto.USERS.DTO.StandardUserDTO;
 import org.example.microstoreprogetto.USERS.entity.Users;
+import org.example.microstoreprogetto.util.base_dto.BaseDTO;
 
 public class UserMessageResponse {
-    private StandardUserDTO user;
+    private BaseDTO user;
     private String Message;
 
     public void setMessage(String message) {
         Message = message;
     }
 
-    public void setUser(StandardUserDTO user) {
+    public void setUser(BaseDTO user) {
         this.user = user;
     }
 
-    public UserMessageResponse(StandardUserDTO u, String msg) {
+    public UserMessageResponse(BaseDTO u, String msg) {
         setUser(u);
         setMessage(msg);
     }
@@ -24,7 +25,7 @@ public class UserMessageResponse {
         return Message;
     }
 
-    public StandardUserDTO getUser() {
+    public BaseDTO getUser() {
         return user;
     }
 }

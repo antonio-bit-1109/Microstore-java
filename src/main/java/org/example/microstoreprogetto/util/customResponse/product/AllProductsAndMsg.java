@@ -2,11 +2,12 @@ package org.example.microstoreprogetto.util.customResponse.product;
 
 import org.aspectj.weaver.ast.Literal;
 import org.example.microstoreprogetto.PRODUCTS.DTO.StandardProductDTO;
+import org.example.microstoreprogetto.util.base_dto.BaseDTO;
 
 import java.util.List;
 
 public class AllProductsAndMsg {
-    private List<StandardProductDTO> listaProdotti;
+    private List<BaseDTO> listaProdotti;
     private String msg;
 
 
@@ -14,12 +15,12 @@ public class AllProductsAndMsg {
         this.msg = msg;
     }
 
-    public void setListaProdotti(List<StandardProductDTO> listaProdotti) {
+    public void setListaProdotti(List<BaseDTO> listaProdotti) {
         this.listaProdotti = listaProdotti;
     }
 
     //costrutt
-    public AllProductsAndMsg(List<StandardProductDTO> listaProd, String msg) {
+    public AllProductsAndMsg(List<BaseDTO> listaProd, String msg) {
         setMsg(msg);
         setListaProdotti(listaProd);
     }
@@ -28,7 +29,7 @@ public class AllProductsAndMsg {
         return msg;
     }
 
-    public List<StandardProductDTO> getListaProdotti() {
+    public List<BaseDTO> getListaProdotti() {
         return listaProdotti;
     }
 }

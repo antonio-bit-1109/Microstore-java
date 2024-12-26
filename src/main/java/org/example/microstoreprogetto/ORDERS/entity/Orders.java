@@ -2,12 +2,13 @@ package org.example.microstoreprogetto.ORDERS.entity;
 
 import jakarta.persistence.*;
 import org.example.microstoreprogetto.USERS.entity.Users;
+import org.example.microstoreprogetto.util.base_entity.BaseEntity;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
-public class Orders {
+public class Orders extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

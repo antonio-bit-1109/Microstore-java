@@ -5,6 +5,7 @@ import org.example.microstoreprogetto.USERS.DTO.EditUserDTO;
 import org.example.microstoreprogetto.USERS.DTO.StandardUserDTO;
 import org.example.microstoreprogetto.USERS.entity.Users;
 import org.example.microstoreprogetto.USERS.repository.UserRepository;
+import org.example.microstoreprogetto.util.base_dto.BaseDTO;
 import org.example.microstoreprogetto.util.configuration.Mapper;
 import org.example.microstoreprogetto.util.generateJWTtoken.JwtUtil;
 import org.example.microstoreprogetto.util.enums.roles.ROLES;
@@ -52,7 +53,7 @@ public class UserServices implements IUserService {
 
     // prima di salvare l utente nel db faccio hashing della password tramite BCrypt
 
-    public StandardUserDTO RegistrationSave(CreateUserDTO userData) {
+    public BaseDTO RegistrationSave(CreateUserDTO userData) {
 
         Users userDTO = new Users();
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
@@ -71,13 +72,16 @@ public class UserServices implements IUserService {
 
         Users user = userRepository.save(userDTO);
 
-        return this.mapper.mapperUserDTO(user.getName(), user.getEmail(), user.getPhone(), user.getIsActive());
+        return mapper.toDTO(user, new StandardUserDTO());
+
+        //  return this.mapper.mapperUserDTO(user.getName(), user.getEmail(), user.getPhone(), user.getIsActive());
     }
 
-    public StandardUserDTO EditSave(Users user) {
-        Users userEntity = userRepository.save(user);
-        return mapper.mapperUserDTO(userEntity.getName(), userEntity.getEmail(), userEntity.getPhone(), userEntity.getIsActive());
-    }
+//    public BaseDTO EditSave(Users user) {
+//        Users userEntity = userRepository.save(user);
+//        return mapper.toDTO(userEntity, new StandardUserDTO());
+//        // return mapper.mapperUserDTO(userEntity.getName(), userEntity.getEmail(), userEntity.getPhone(), userEntity.getIsActive());
+//    }
 
     public void softDelete(Optional<Users> OptionalUser) {
 
@@ -123,7 +127,7 @@ public class UserServices implements IUserService {
     }
 
 
-    public StandardUserDTO CheckAndMapUser(Optional<Users> optionalUser, EditUserDTO editData) {
+    public BaseDTO CheckAndMapUser(Optional<Users> optionalUser, EditUserDTO editData) {
         try {
 
             if (optionalUser.isPresent()) {
@@ -146,8 +150,7 @@ public class UserServices implements IUserService {
                 // controllo che non esista gia un utente con questa email
                 FindByEmail_alreadyExist(user);
                 userRepository.save(user);
-                return mapper.mapperUserDTO(user.getName(), user.getEmail(), user.getPhone(), user.getIsActive());
-
+                return mapper.toDTO(user, new StandardUserDTO());
             } else {
 
                 throw new RuntimeException("l'utente selezionato non esiste.");
@@ -161,7 +164,7 @@ public class UserServices implements IUserService {
 
     }
 
-    public StandardUserDTO TrovaUtente(Long id) {
+    public BaseDTO TrovaUtente(Long id) {
 
         Optional<Users> utenteOpt = userRepository.findById(id);
 
@@ -170,6 +173,7 @@ public class UserServices implements IUserService {
         }
 
         Users user = utenteOpt.get();
-        return mapper.mapperUserDTO(user.getName(), user.getEmail(), user.getPhone(), user.getIsActive());
+        return mapper.toDTO(user, new StandardUserDTO());
+        //  return mapper.mapperUserDTO(user.getName(), user.getEmail(), user.getPhone(), user.getIsActive());
     }
 }

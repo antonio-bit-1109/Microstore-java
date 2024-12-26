@@ -1,9 +1,11 @@
 package org.example.microstoreprogetto.ORDERS.DTO;
 
+import org.example.microstoreprogetto.util.base_dto.BaseDTO;
+
 import java.sql.Time;
 import java.sql.Timestamp;
 
-public class StandardOrderDTO {
+public class StandardOrderDTO extends BaseDTO {
 
     private Long idOrdine;
     private String usernameAcquirente;

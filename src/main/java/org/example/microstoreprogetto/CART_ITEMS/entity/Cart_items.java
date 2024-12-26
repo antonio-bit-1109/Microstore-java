@@ -4,22 +4,23 @@ package org.example.microstoreprogetto.CART_ITEMS.entity;
 import jakarta.persistence.*;
 import org.example.microstoreprogetto.CARTS.entity.Carts;
 import org.example.microstoreprogetto.PRODUCTS.entity.Products;
+import org.example.microstoreprogetto.util.base_entity.BaseEntity;
 
 @Entity
-public class Cart_items {
+public class Cart_items extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-   // private Long cart_id;
+    // private Long cart_id;
 
     //private Long product_id;
 
     private Integer quantity;
 
     @ManyToOne
-    @JoinColumn(name = "cart_id" , nullable = false)
+    @JoinColumn(name = "cart_id", nullable = false)
     private Carts carts;
 
     @ManyToOne

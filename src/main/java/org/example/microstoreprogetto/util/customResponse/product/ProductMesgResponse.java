@@ -1,14 +1,15 @@
 package org.example.microstoreprogetto.util.customResponse.product;
 
 import org.example.microstoreprogetto.PRODUCTS.DTO.StandardProductDTO;
+import org.example.microstoreprogetto.util.base_dto.BaseDTO;
 
 public class ProductMesgResponse {
 
     private String msg;
-    private StandardProductDTO prodDTO;
+    private BaseDTO prodDTO;
 
     //costrutt
-    public ProductMesgResponse(StandardProductDTO prodDTO, String msg) {
+    public ProductMesgResponse(BaseDTO prodDTO, String msg) {
         setMsg(msg);
         setProdDTO(prodDTO);
     }
@@ -17,7 +18,7 @@ public class ProductMesgResponse {
         this.msg = msg;
     }
 
-    public void setProdDTO(StandardProductDTO prodDTO) {
+    public void setProdDTO(BaseDTO prodDTO) {
         this.prodDTO = prodDTO;
     }
 
@@ -25,7 +26,7 @@ public class ProductMesgResponse {
         return msg;
     }
 
-    public StandardProductDTO getProdDTO() {
+    public BaseDTO getProdDTO() {
         return prodDTO;
     }
 }

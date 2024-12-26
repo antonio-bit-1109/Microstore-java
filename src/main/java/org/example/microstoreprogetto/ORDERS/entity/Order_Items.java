@@ -2,9 +2,10 @@ package org.example.microstoreprogetto.ORDERS.entity;
 
 import jakarta.persistence.*;
 import org.example.microstoreprogetto.PRODUCTS.entity.Products;
+import org.example.microstoreprogetto.util.base_entity.BaseEntity;
 
 @Entity
-public class Order_Items {
+public class Order_Items extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,6 +10,7 @@ import org.example.microstoreprogetto.USERS.entity.Users;
 import org.example.microstoreprogetto.USERS.service.UserServices;
 
 
+import org.example.microstoreprogetto.util.base_dto.BaseDTO;
 import org.example.microstoreprogetto.util.configuration.webautenticationdetails.CustomWebAuthenticationDetails;
 import org.example.microstoreprogetto.util.customResponse.general.MessageResp;
 import org.example.microstoreprogetto.util.customResponse.user.UserMessageResponse;
@@ -49,14 +50,14 @@ public class UserController {
 
         try {
 
-            StandardUserDTO user = userServices.RegistrationSave(userData);
+            BaseDTO user = userServices.RegistrationSave(userData);
 
             UserMessageResponse usmsResp = new UserMessageResponse(user, "utente creato con successo");
             return new ResponseEntity<>(usmsResp, HttpStatus.OK);
 
         } catch (RuntimeException e) {
 
-            UserMessageResponse usmsResp = new UserMessageResponse(null, "errore durante la creazione dell'utente. " + e);
+            UserMessageResponse usmsResp = new UserMessageResponse(null, "errore durante la creazione dell'utente. " + e.getMessage());
             return new ResponseEntity<>(usmsResp, HttpStatus.NOT_FOUND);
         }
 
@@ -69,7 +70,7 @@ public class UserController {
         try {
 
             Optional<Users> optionalUser = userServices.findUserbyId(editData.getId());
-            StandardUserDTO returnedUser = userServices.CheckAndMapUser(optionalUser, editData);
+            BaseDTO returnedUser = userServices.CheckAndMapUser(optionalUser, editData);
             return new ResponseEntity<>(new UserMessageResponse(returnedUser, "utente modificato con successo."), HttpStatus.OK);
 
         } catch (RuntimeException e) {
@@ -100,7 +101,7 @@ public class UserController {
                 throw new RuntimeException("stai cercando di modificare i dati di un altro utente. Impossibile proseguire.");
             }
 
-            StandardUserDTO user = userServices.TrovaUtente(id);
+            BaseDTO user = userServices.TrovaUtente(id);
             return new ResponseEntity<>(new UserMessageResponse(user, "utente trovato con successo"), HttpStatus.OK);
 
         } catch (RuntimeException ex) {

@@ -3,12 +3,13 @@ package org.example.microstoreprogetto.PRODUCTS.entity;
 import jakarta.persistence.*;
 import org.example.microstoreprogetto.CART_ITEMS.entity.Cart_items;
 import org.example.microstoreprogetto.ORDERS.entity.Order_Items;
+import org.example.microstoreprogetto.util.base_entity.BaseEntity;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
-public class Products {
+public class Products extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

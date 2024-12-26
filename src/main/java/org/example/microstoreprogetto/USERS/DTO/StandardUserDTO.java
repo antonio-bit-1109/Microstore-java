@@ -1,11 +1,13 @@
 package org.example.microstoreprogetto.USERS.DTO;
 
-public class StandardUserDTO {
+import org.example.microstoreprogetto.util.base_dto.BaseDTO;
+
+public class StandardUserDTO extends BaseDTO {
 
     private String name;
     private String email;
     private String phone;
-    private Boolean isActive;
+    private String isActive;
 
     public String getName() {
         return name;
@@ -31,11 +33,11 @@ public class StandardUserDTO {
         this.phone = phone;
     }
 
-    public Boolean getActive() {
+    public String getIsActive() {
         return isActive;
     }
 
-    public void setActive(Boolean active) {
+    public void setIsActive(String active) {
         isActive = active;
     }
 }

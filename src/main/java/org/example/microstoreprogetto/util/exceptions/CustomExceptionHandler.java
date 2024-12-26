@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-//questa classe intercetta ogni parametro che arriva su un controller e , se la relativa DTO presenta delle annotation
+//questa classe intercetta ogni DTO che arriva su un controller e , se la relativa DTO presenta delle annotation
 // che non vengono rispettate, genera una stringa di errore che viene re-inviata al client.
 @RestControllerAdvice
 public class CustomExceptionHandler {

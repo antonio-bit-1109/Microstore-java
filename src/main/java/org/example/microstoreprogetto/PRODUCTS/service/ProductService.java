@@ -5,6 +5,7 @@ import org.example.microstoreprogetto.PRODUCTS.DTO.CreateProductDTO;
 import org.example.microstoreprogetto.PRODUCTS.DTO.StandardProductDTO;
 import org.example.microstoreprogetto.PRODUCTS.entity.Products;
 import org.example.microstoreprogetto.PRODUCTS.repository.ProductRepository;
+import org.example.microstoreprogetto.util.base_dto.BaseDTO;
 import org.example.microstoreprogetto.util.configuration.Mapper;
 import org.example.microstoreprogetto.util.enums.categoryproduct.CategoryProduct;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,7 @@ public class ProductService implements IProductService {
 
     }
 
-    public StandardProductDTO addStockQuantity(AddStockProductDTO prodStockDTO) {
+    public BaseDTO addStockQuantity(AddStockProductDTO prodStockDTO) {
 
         Optional<Products> optionalProduct = productRepository.findById(prodStockDTO.getId());
 
@@ -67,19 +68,19 @@ public class ProductService implements IProductService {
         prodottoTrovato.setStock(prodottoTrovato.getStock() + prodStockDTO.getStock());
         productRepository.save(prodottoTrovato);
 
-        return this.mapper.MapperProductDto(
-                prodottoTrovato.getName(),
-                prodottoTrovato.getCategory(),
-                Float.toString(prodottoTrovato.getPrice()),
-                prodottoTrovato.getDescription(),
-                Integer.toString(prodottoTrovato.getStock()),
-                prodottoTrovato.getIs_active()
-        );
+//        return this.mapper.MapperProductDto(
+//                prodottoTrovato.getName(),
+//                prodottoTrovato.getCategory(),
+//                Float.toString(prodottoTrovato.getPrice()),
+//                prodottoTrovato.getDescription(),
+//                Integer.toString(prodottoTrovato.getStock()),
+//                prodottoTrovato.getIs_active()
+//        );
+        return mapper.toDTO(prodottoTrovato, new StandardProductDTO());
 
-        // return mapper.getProductDTO();
     }
 
-    public StandardProductDTO getProduct(Long id) {
+    public BaseDTO getProduct(Long id) {
 
         Optional<Products> optionalProducts = productRepository.findById(id);
 
@@ -89,14 +90,17 @@ public class ProductService implements IProductService {
 
         Products prodottoTrovato = optionalProducts.get();
 
-        return this.mapper.MapperProductDto(
-                prodottoTrovato.getName(),
-                prodottoTrovato.getCategory(),
-                Float.toString(prodottoTrovato.getPrice()),
-                prodottoTrovato.getDescription(),
-                Integer.toString(prodottoTrovato.getStock()),
-                prodottoTrovato.getIs_active()
-        );
+//        return this.mapper.MapperProductDto(
+//                prodottoTrovato.getName(),
+//                prodottoTrovato.getCategory(),
+//                Float.toString(prodottoTrovato.getPrice()),
+//                prodottoTrovato.getDescription(),
+//                Integer.toString(prodottoTrovato.getStock()),
+//                prodottoTrovato.getIs_active()
+//        );
+
+//        StandardProductDTO stanProdDTO = new StandardProductDTO();
+        return this.mapper.toDTO(prodottoTrovato, new StandardProductDTO());
 
         // return mapper.getProductDTO();
     }
@@ -113,26 +117,17 @@ public class ProductService implements IProductService {
         productRepository.save(prodottoTrovato);
     }
 
-    public List<StandardProductDTO> GetTuttiProdotti() {
-        // List<StandardProductDTO> listaProdottiDTO = new ArrayList<>();
+    public List<BaseDTO> GetTuttiProdotti() {
 
         List<Products> listaProdottiDB = productRepository.findAll();
 
-        return listaProdottiDB.stream().map(prodEntity -> new StandardProductDTO(
-                prodEntity.getName(),
-                prodEntity.getCategory(),
-                Float.toString(prodEntity.getPrice()),
-                prodEntity.getDescription(),
-                Integer.toString(prodEntity.getStock()),
-                prodEntity.getIs_active()
-        )).collect(Collectors.toList());
+        List<BaseDTO> listaProdDTO = new ArrayList<>();
 
-//        for (Products prod : listaProdottiDB) {
-//            listaProdottiDTO.add(mapper.MapperProductDto(prod.getName(), prod.getCategory(), Float.toString(prod.getPrice()),
-//                    prod.getDescription(), Integer.toString(prod.getStock()), prod.getIs_active()));
-//
-//        }
-//
-//        return listaProdottiDTO;
+        for (Products prodotto : listaProdottiDB) {
+            listaProdDTO.add(mapper.toDTO(prodotto, new StandardProductDTO()));
+        }
+
+        return listaProdDTO;
+
     }
 }

@@ -1,15 +1,17 @@
 package org.example.microstoreprogetto.PRODUCTS.DTO;
 
-public class StandardProductDTO {
+import org.example.microstoreprogetto.util.base_dto.BaseDTO;
+
+public class StandardProductDTO extends BaseDTO {
 
     private String name;
     private String description;
     private String prezzo;
     private String category;
     private String stock;
-    private Boolean is_active;
+    private String is_active;
 
-    public void setIs_active(Boolean is_active) {
+    public void setIs_active(String is_active) {
         this.is_active = is_active;
     }
 
@@ -25,7 +27,7 @@ public class StandardProductDTO {
         this.description = description;
     }
 
-    public void setPrezzo(String prezzo) {
+    public void setPrice(String prezzo) {
         this.prezzo = prezzo;
     }
 
@@ -38,17 +40,17 @@ public class StandardProductDTO {
     }
 
     //costrutt
-    public StandardProductDTO(String name, String category, String prezzo, String Descrizione, String stock, boolean is_active) {
+    public StandardProductDTO(String name, String category, String prezzo, String Descrizione, String stock, String is_active) {
         setName(name);
         setCategory(category);
-        setPrezzo(prezzo);
+        setPrice(prezzo);
         setDescription(Descrizione);
         setStock(stock);
         setIs_active(is_active);
     }
 
 
-    public Boolean getIs_active() {
+    public String getIs_active() {
         return is_active;
     }
 
