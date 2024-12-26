@@ -2,11 +2,12 @@ package org.example.microstoreprogetto.util.customResponse.user;
 
 import org.example.microstoreprogetto.USERS.DTO.StandardUserDTO;
 import org.example.microstoreprogetto.USERS.entity.Users;
+import org.example.microstoreprogetto.util.base_dto.BaseDTO;
 
 import java.util.List;
 
 public class AllUsersAndMsg {
-    private List<StandardUserDTO> listaUtenti;
+    private List<BaseDTO> listaUtenti;
     private String msg;
 
 
@@ -14,12 +15,12 @@ public class AllUsersAndMsg {
         this.msg = msg;
     }
 
-    public void setListaUtenti(List<StandardUserDTO> listaUtenti) {
+    public void setListaUtenti(List<BaseDTO> listaUtenti) {
         this.listaUtenti = listaUtenti;
     }
 
     //costrutt
-    public AllUsersAndMsg(List<StandardUserDTO> listaUtenti, String msg) {
+    public AllUsersAndMsg(List<BaseDTO> listaUtenti, String msg) {
         setMsg(msg);
         setListaUtenti(listaUtenti);
     }
@@ -28,7 +29,7 @@ public class AllUsersAndMsg {
         return msg;
     }
 
-    public List<StandardUserDTO> getListaUtenti() {
+    public List<BaseDTO> getListaUtenti() {
         return listaUtenti;
     }
 }

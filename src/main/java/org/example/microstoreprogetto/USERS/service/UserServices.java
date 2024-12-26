@@ -35,13 +35,14 @@ public class UserServices implements IUserService {
     }
 
     // get di tutti gli utenti -- solo admin puo farlo
-    public List<StandardUserDTO> prendiTuttiUtenti() {
+    public List<BaseDTO> prendiTuttiUtenti() {
 
-        List<StandardUserDTO> listaUtentiDTO = new ArrayList<>();
+        List<BaseDTO> listaUtentiDTO = new ArrayList<>();
         List<Users> listaUtenti = userRepository.findAll();
 
         for (Users utente : listaUtenti) {
-            listaUtentiDTO.add(mapper.mapperUserDTO(utente.getName(), utente.getEmail(), utente.getPhone(), utente.getIsActive()));
+            // listaUtentiDTO.add(mapper.mapperUserDTO(utente.getName(), utente.getEmail(), utente.getPhone(), utente.getIsActive()));
+            listaUtentiDTO.add(mapper.toDTO(utente, new StandardUserDTO()));
         }
         return listaUtentiDTO;
     }

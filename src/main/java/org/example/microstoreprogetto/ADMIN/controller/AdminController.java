@@ -5,6 +5,7 @@ import org.example.microstoreprogetto.PRODUCTS.DTO.StandardProductDTO;
 import org.example.microstoreprogetto.USERS.DTO.StandardUserDTO;
 import org.example.microstoreprogetto.USERS.entity.Users;
 import org.example.microstoreprogetto.USERS.service.UserServices;
+import org.example.microstoreprogetto.util.base_dto.BaseDTO;
 import org.example.microstoreprogetto.util.customResponse.general.MessageResp;
 import org.example.microstoreprogetto.util.customResponse.product.AllProductsAndMsg;
 import org.example.microstoreprogetto.util.customResponse.user.AllUsersAndMsg;
@@ -30,7 +31,7 @@ public class AdminController {
 
     public AdminController(UserServices userServices) {
         this.userServices = userServices;
-     
+
     }
 
     // soft delete utente (isactive = false)
@@ -78,7 +79,7 @@ public class AdminController {
     public ResponseEntity<AllUsersAndMsg> getAllUtenti() {
         try {
 
-            List<StandardUserDTO> listaUtenti = userServices.prendiTuttiUtenti();
+            List<BaseDTO> listaUtenti = userServices.prendiTuttiUtenti();
             return new ResponseEntity<>(new AllUsersAndMsg(listaUtenti, "lista utenti ottenuta con successo."), HttpStatus.OK);
 
         } catch (RuntimeException ex) {
