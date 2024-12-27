@@ -8,6 +8,7 @@ import org.example.microstoreprogetto.ORDERS.DTO.StandardOrderDTO;
 import org.example.microstoreprogetto.ORDERS.repository.OrderRepository;
 import org.example.microstoreprogetto.ORDERS.service.OrderService;
 import org.example.microstoreprogetto.USERS.service.UserServices;
+import org.example.microstoreprogetto.util.base_dto.BaseDTO;
 import org.example.microstoreprogetto.util.customResponse.general.MessageResp;
 import org.example.microstoreprogetto.util.customResponse.order.OrderMsgResponse;
 import org.hibernate.query.Order;
@@ -30,7 +31,7 @@ public class OrderController {
 
         try {
 
-            StandardOrderDTO order = this.orderService.creazioneOrdine(orderData);
+            BaseDTO order = this.orderService.creazioneOrdine(orderData);
             return new ResponseEntity<>(new OrderMsgResponse(order, "ordine creato con successo"), HttpStatus.OK);
 
         } catch (RuntimeException ex) {

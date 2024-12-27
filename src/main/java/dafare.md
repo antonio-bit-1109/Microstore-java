@@ -27,3 +27,5 @@
 - [] fai le varie getall di un po tutte le entity
 - [] crea un adminService dal quale richiamare i repository
 - [] completa i metodi del mapper per generare DTO usando reflection
+
+-[] devi castare qualcosa a Users altrimenti ricevi l'allocazione di memoria invece dei dati effettivi dello users ??? 

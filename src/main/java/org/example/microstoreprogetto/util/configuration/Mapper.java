@@ -7,6 +7,7 @@ import org.example.microstoreprogetto.PRODUCTS.DTO.StandardProductDTO;
 import org.example.microstoreprogetto.PRODUCTS.entity.Products;
 import org.example.microstoreprogetto.PRODUCTS.repository.ProductRepository;
 import org.example.microstoreprogetto.USERS.DTO.StandardUserDTO;
+import org.example.microstoreprogetto.USERS.entity.Users;
 import org.example.microstoreprogetto.util.base_dto.BaseDTO;
 import org.example.microstoreprogetto.util.base_entity.BaseEntity;
 import org.example.microstoreprogetto.util.configuration.mapperinterface.GenericMapper;
@@ -34,17 +35,17 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity> {
     }
 
 
-    public StandardProductDTO MapperProductDto(String name, String category, String price, String description, String stock, Boolean isactive) {
-        StandardProductDTO standardProduct = new StandardProductDTO();
-
-        standardProduct.setName(name);
-        standardProduct.setCategory(category);
-        standardProduct.setPrice(price);
-        standardProduct.setDescription(description);
-        standardProduct.setStock(stock);
-        standardProduct.setIs_active(isactive.toString());
-        return standardProduct;
-    }
+//    public StandardProductDTO MapperProductDto(String name, String category, String price, String description, String stock, Boolean isactive) {
+//        StandardProductDTO standardProduct = new StandardProductDTO();
+//
+//        standardProduct.setName(name);
+//        standardProduct.setCategory(category);
+//        standardProduct.setPrice(price);
+//        standardProduct.setDescription(description);
+//        standardProduct.setStock(stock);
+//        standardProduct.setIs_active(isactive.toString());
+//        return standardProduct;
+//    }
 
     public List<Order_Items> MapperToOrderListType(ArrayList<ProductInfoDTO> listaProdotti) throws RuntimeException {
 
@@ -74,23 +75,24 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity> {
     public StandardOrderDTO mapperOrderDTO(Long idOrdine, String nameAcquirente, String status, Double totSpesa, Time currentTime) {
         StandardOrderDTO orderDTOResponse = new StandardOrderDTO();
 
-        orderDTOResponse.setIdOrdine(idOrdine);
-        orderDTOResponse.setUsernameAcquirente(nameAcquirente);
+        orderDTOResponse.setId(idOrdine.toString());
+        //  orderDTOResponse.setUsernameAcquirente(nameAcquirente);
         orderDTOResponse.setStatus(status);
-        orderDTOResponse.setTotalespesa(totSpesa);
-        orderDTOResponse.setOraordine(currentTime);
+        orderDTOResponse.setTotal(totSpesa.toString());
+        orderDTOResponse.setCreated_at(currentTime.toString());
         return orderDTOResponse;
     }
 
-    public StandardUserDTO mapperUserDTO(String name, String email, String phone, Boolean isActive) {
+//    public StandardUserDTO mapperUserDTO(String name, String email, String phone, Boolean isActive) {
+//
+//        StandardUserDTO userDTOResp = new StandardUserDTO();
+//        userDTOResp.setName(name);
+//        userDTOResp.setEmail(email);
+//        userDTOResp.setPhone(phone);
+//        userDTOResp.setIsActive(isActive.toString());
+//        return userDTOResp;
+//    }
 
-        StandardUserDTO userDTOResp = new StandardUserDTO();
-        userDTOResp.setName(name);
-        userDTOResp.setEmail(email);
-        userDTOResp.setPhone(phone);
-        userDTOResp.setIsActive(isActive.toString());
-        return userDTOResp;
-    }
 
     // il metodo accetta un entity di tipo BaseEntity , tutte le entità estendono baseEntity
     // il secondo parametro è la classe che voglio ritornare come DTO al cnotroller , tutti i DTO estendono BaseDTO
@@ -99,7 +101,7 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity> {
         try {
 
             // creo una mappa che conterrà tutti i metodi get dell entity con relativo valore.
-            Map<String, String> mappaMetodiGetEntity = new HashMap<>();
+            Map<String, Object> mappaMetodiGetEntity = new HashMap<>();
 
 
             //estraggo tutti i metodi dell entity
@@ -111,7 +113,18 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity> {
                     Object ValueMetodo = metodo.invoke(entity);
 
                     if (ValueMetodo != null) {
+
+                        // se il valore del metodo getter preso dall'entity non è una semplice stringa ma un oggetto
+                        // devo mantenere l'oggetto e non castarlo ad stringa
+                        // CONTROLLO DA FARE SU TUTTI GLI OGGETTI CHE POSSONO ESSERE PRESENTI NELL ENTITà COME DATO
+                        if (ValueMetodo instanceof Users) {
+                            mappaMetodiGetEntity.put(metodo.getName(), ValueMetodo);
+                            continue;
+                        }
+
                         mappaMetodiGetEntity.put(metodo.getName(), ValueMetodo.toString());
+
+
                     }
                 }
             }
@@ -137,7 +150,7 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity> {
                 if (nomeMetodo.startsWith("set")) {
 
                     // ciclo la mappa dell entity  ...
-                    for (Map.Entry<String, String> entry1 : mappaMetodiGetEntity.entrySet()) {
+                    for (Map.Entry<String, Object> entry1 : mappaMetodiGetEntity.entrySet()) {
 
                         if (nomeMetodo
                                 .substring(3)
@@ -145,9 +158,9 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity> {
                                         .substring(3))) {
 
                             metodoDTO.invoke(dtoClass, entry1.getValue());
+                            break;
                         }
                     }
-
 
                 }
             }

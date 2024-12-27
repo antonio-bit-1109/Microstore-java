@@ -8,6 +8,7 @@ import org.example.microstoreprogetto.ORDERS.repository.OrderRepository;
 import org.example.microstoreprogetto.ORDERS.entity.Order_Items;
 import org.example.microstoreprogetto.USERS.entity.Users;
 import org.example.microstoreprogetto.USERS.repository.UserRepository;
+import org.example.microstoreprogetto.util.base_dto.BaseDTO;
 import org.example.microstoreprogetto.util.configuration.CheckCalcoliOrder;
 import org.example.microstoreprogetto.util.configuration.Mapper;
 import org.example.microstoreprogetto.util.enums.statoordine.STATOORDINE;
@@ -34,7 +35,7 @@ public class OrderService implements IOrderService {
         this.mapper = mapper;
     }
 
-    public StandardOrderDTO creazioneOrdine(CreateOrderDTO orderDTO) {
+    public BaseDTO creazioneOrdine(CreateOrderDTO orderDTO) {
 
 //        OGGETTO TIPO INVIATO DAL CLIENT:
 //        {
@@ -88,8 +89,8 @@ public class OrderService implements IOrderService {
 
         orderRepository.save(ordine);
 
-        return mapper.mapperOrderDTO(ordine.getId(), user.getName(), ordine.getStatus(), ordine.getTotal(), currentTime);
-
+        // return mapper.mapperOrderDTO(ordine.getId(), user.getName(), ordine.getStatus(), ordine.getTotal(), currentTime);
+        return mapper.toDTO(ordine, new StandardOrderDTO());
     }
 
     public String StatusProcessing(Long id) {

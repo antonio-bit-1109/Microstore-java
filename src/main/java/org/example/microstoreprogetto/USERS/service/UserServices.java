@@ -75,14 +75,8 @@ public class UserServices implements IUserService {
 
         return mapper.toDTO(user, new StandardUserDTO());
 
-        //  return this.mapper.mapperUserDTO(user.getName(), user.getEmail(), user.getPhone(), user.getIsActive());
     }
 
-//    public BaseDTO EditSave(Users user) {
-//        Users userEntity = userRepository.save(user);
-//        return mapper.toDTO(userEntity, new StandardUserDTO());
-//        // return mapper.mapperUserDTO(userEntity.getName(), userEntity.getEmail(), userEntity.getPhone(), userEntity.getIsActive());
-//    }
 
     public void softDelete(Optional<Users> OptionalUser) {
 

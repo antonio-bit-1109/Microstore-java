@@ -1,5 +1,6 @@
 package org.example.microstoreprogetto.ORDERS.DTO;
 
+import org.example.microstoreprogetto.USERS.entity.Users;
 import org.example.microstoreprogetto.util.base_dto.BaseDTO;
 
 import java.sql.Time;
@@ -7,26 +8,26 @@ import java.sql.Timestamp;
 
 public class StandardOrderDTO extends BaseDTO {
 
-    private Long idOrdine;
+    private String idOrdine;
     private String usernameAcquirente;
     private String status;
-    private Double totalespesa;
-    private Time oraordine;
+    private String totalespesa;
+    private String oraordine;
 
-    public void setIdOrdine(Long idOrdine) {
+    public void setId(String idOrdine) {
         this.idOrdine = idOrdine;
     }
 
-    public Long getIdOrdine() {
+    public String getId() {
         return idOrdine;
     }
 
-    public String getUsernameAcquirente() {
+    public String getUser() {
         return usernameAcquirente;
     }
 
-    public void setUsernameAcquirente(String usernameAcquirente) {
-        this.usernameAcquirente = usernameAcquirente;
+    public void setUser(Users userEntity) {
+        this.usernameAcquirente = userEntity.getName();
     }
 
     public String getStatus() {
@@ -37,19 +38,19 @@ public class StandardOrderDTO extends BaseDTO {
         this.status = status;
     }
 
-    public Double getTotalespesa() {
+    public String getTotal() {
         return totalespesa;
     }
 
-    public void setTotalespesa(Double totalespesa) {
+    public void setTotal(String totalespesa) {
         this.totalespesa = totalespesa;
     }
 
-    public Time getOraordine() {
+    public String getCreated_at() {
         return oraordine;
     }
 
-    public void setOraordine(Time oraordine) {
+    public void setCreated_at(String oraordine) {
         this.oraordine = oraordine;
     }
 }
