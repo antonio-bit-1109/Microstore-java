@@ -1,8 +1,7 @@
-package org.example.microstoreprogetto.CART_ITEMS.entity;
+package org.example.microstoreprogetto.CARTS.entity;
 
 
 import jakarta.persistence.*;
-import org.example.microstoreprogetto.CARTS.entity.Carts;
 import org.example.microstoreprogetto.PRODUCTS.entity.Products;
 import org.example.microstoreprogetto.util.base_entity.BaseEntity;
 
@@ -31,14 +30,6 @@ public class Cart_items extends BaseEntity {
         this.id = id;
     }
 
-//    public void setCart_id(Long cart_id) {
-//        this.cart_id = cart_id;
-//    }
-
-//    public void setProduct_id(Long product_id) {
-//        this.product_id = product_id;
-//    }
-
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
@@ -51,11 +42,20 @@ public class Cart_items extends BaseEntity {
         return quantity;
     }
 
-//    public Long getCart_id() {
-//        return cart_id;
-//    }
 
-//    public Long getProduct_id() {
-//        return product_id;
-//    }
+    public Carts getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Carts carts) {
+        this.carts = carts;
+    }
+
+    public Products getProduct() {
+        return product;
+    }
+
+    public void setProduct(Products product) {
+        this.product = product;
+    }
 }

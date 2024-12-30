@@ -1,5 +1,9 @@
 package org.example.microstoreprogetto.util.configuration;
 
+
+import org.example.microstoreprogetto.CARTS.DTO.StandardCartDTO;
+import org.example.microstoreprogetto.CARTS.entity.Cart_items;
+import org.example.microstoreprogetto.CARTS.entity.Carts;
 import org.example.microstoreprogetto.ORDERS.DTO.ProductInfoDTO;
 import org.example.microstoreprogetto.ORDERS.DTO.StandardOrderDTO;
 import org.example.microstoreprogetto.ORDERS.entity.Order_Items;
@@ -14,6 +18,7 @@ import org.example.microstoreprogetto.util.configuration.mapperinterface.Generic
 import org.springframework.stereotype.Component;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Time;
@@ -33,24 +38,25 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity> {
         this.productRepository = productRepository;
         //  this.methodValidationPostProcessor = methodValidationPostProcessor;
     }
+    
+
+    // serve per creare gli oggetti Order_items, ovvero la lista dei prodotti presenti nell 'ordine
+    public List<? extends BaseEntity> MapperToListType(
+
+            ArrayList<ProductInfoDTO> listaProdotti,
+            Class<? extends BaseEntity> ResultEntity
+
+    )
+            throws RuntimeException,
+            InstantiationException,
+            IllegalAccessException,
+            NoSuchMethodException,
+            InvocationTargetException {
 
 
-//    public StandardProductDTO MapperProductDto(String name, String category, String price, String description, String stock, Boolean isactive) {
-//        StandardProductDTO standardProduct = new StandardProductDTO();
-//
-//        standardProduct.setName(name);
-//        standardProduct.setCategory(category);
-//        standardProduct.setPrice(price);
-//        standardProduct.setDescription(description);
-//        standardProduct.setStock(stock);
-//        standardProduct.setIs_active(isactive.toString());
-//        return standardProduct;
-//    }
+        List<BaseEntity> listaEntity = new ArrayList<>();
 
-    public List<Order_Items> MapperToOrderListType(ArrayList<ProductInfoDTO> listaProdotti) throws RuntimeException {
-
-        List<Order_Items> listaOrdiniItems = new ArrayList<>();
-
+        // prendo ogni prodotto passato e controllo che esista tramite id
         for (ProductInfoDTO prodotto : listaProdotti) {
 
             Optional<Products> optionalProdottoEntity = productRepository.findById(Long.parseLong(prodotto.getIdProd()));
@@ -59,39 +65,68 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity> {
                 throw new RuntimeException("errore nel reperimento del prodotto entity");
             }
 
-            Products prodottoEntity = optionalProdottoEntity.get();
+            Products prod = optionalProdottoEntity.get();
 
-            Order_Items orderItem = new Order_Items();
-            // orderItem.setId(Long.parseLong(prodotto.getIdProd()));
-            orderItem.setQuantity((float) prodotto.getQuantity());
-            orderItem.setPrice(prodotto.getPrezzoUnitario().floatValue());
-            orderItem.setProduct(prodottoEntity);
-            listaOrdiniItems.add(orderItem);
+            // creo un istanza della resultEntity
+            BaseEntity resEntity = ResultEntity.getDeclaredConstructor().newInstance();
+
+            // METODO FACILE
+            // capisco quale sia l'entity che mi serve per questo caso, la casto,
+            // la riempio con gli oggetti giusti
+            // e la ritorno.
+//            if (resEntity.getClass().getName().toLowerCase().contains(".order_item")) {
+            if (resEntity instanceof Order_Items) {
+
+                CastToOrderItemEntity(resEntity, prod, prodotto, listaEntity);
+
+            }
+
+            if (resEntity instanceof Cart_items) {
+
+                CastToCartItemsEntity(resEntity, prod, prodotto, listaEntity);
+
+            }
+
         }
-        return listaOrdiniItems;
+        return listaEntity;
+
+    }
+
+    private void CastToOrderItemEntity(BaseEntity resEntity, Products prod, ProductInfoDTO prodotto, List<BaseEntity> listaEntity) {
+
+        Order_Items entityOrdItems = (Order_Items) resEntity;
+        entityOrdItems.setQuantity((float) prodotto.getQuantity());
+        entityOrdItems.setPrice(prodotto.getPrezzoUnitario().floatValue());
+        entityOrdItems.setProduct(prod);
+        listaEntity.add(entityOrdItems);
+    }
+
+    private void CastToCartItemsEntity(BaseEntity resEntity, Products prod, ProductInfoDTO prodotto, List<BaseEntity> listaEntity) {
+
+        Cart_items entityCartItems = (Cart_items) resEntity;
+        entityCartItems.setProduct(prod);
+        entityCartItems.setQuantity(prodotto.getQuantity());
+
+//        entityOrdItems.setQuantity((float) prodotto.getQuantity());
+//        entityOrdItems.setPrice(prodotto.getPrezzoUnitario().floatValue());
+//        entityOrdItems.setProduct(prod);
+        listaEntity.add(entityCartItems);
     }
 
 
-    public StandardOrderDTO mapperOrderDTO(Long idOrdine, String nameAcquirente, String status, Double totSpesa, Time currentTime) {
-        StandardOrderDTO orderDTOResponse = new StandardOrderDTO();
+    // controlla che la lista passata sia effettivamente composta da tutti oggetti cart_items
+    private boolean isItemCartItem(List<Object> listaOggetti) {
 
-        orderDTOResponse.setId(idOrdine.toString());
-        //  orderDTOResponse.setUsernameAcquirente(nameAcquirente);
-        orderDTOResponse.setStatus(status);
-        orderDTOResponse.setTotal(totSpesa.toString());
-        orderDTOResponse.setCreated_at(currentTime.toString());
-        return orderDTOResponse;
+        for (Object item : listaOggetti) {
+
+            if (!(item instanceof Cart_items)) {
+                return false;
+
+            }
+
+        }
+        return true;
     }
-
-//    public StandardUserDTO mapperUserDTO(String name, String email, String phone, Boolean isActive) {
-//
-//        StandardUserDTO userDTOResp = new StandardUserDTO();
-//        userDTOResp.setName(name);
-//        userDTOResp.setEmail(email);
-//        userDTOResp.setPhone(phone);
-//        userDTOResp.setIsActive(isActive.toString());
-//        return userDTOResp;
-//    }
 
 
     // il metodo accetta un entity di tipo BaseEntity , tutte le entità estendono baseEntity
@@ -120,6 +155,15 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity> {
                         if (ValueMetodo instanceof Users) {
                             mappaMetodiGetEntity.put(metodo.getName(), ValueMetodo);
                             continue;
+                        }
+
+                        // se il valore del metodo è un oggetto di tipo Cart_items non prendo il suo valore in stringa ma lo casto ad oggetto di tipo Cart_items
+                        // e lo metto nella mappa.
+                        if (ValueMetodo instanceof List<?>) {
+
+                            mappaMetodiGetEntity.put(metodo.getName(), ValueMetodo);
+                            continue;
+
                         }
 
                         mappaMetodiGetEntity.put(metodo.getName(), ValueMetodo.toString());

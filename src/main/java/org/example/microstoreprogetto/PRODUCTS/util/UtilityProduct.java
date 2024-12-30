@@ -115,6 +115,9 @@ public class UtilityProduct {
     public <T> void CheckProductExistence(List<T> listaProdotti, Class<T> tClass) {
         try {
 
+            // svuota lista id prodotti
+            ResetSizeLista();
+            
             for (T prod : listaProdotti) {
 
                 if (tClass.isInstance(prod)) {

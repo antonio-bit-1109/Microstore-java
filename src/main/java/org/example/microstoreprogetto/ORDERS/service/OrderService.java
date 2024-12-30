@@ -1,5 +1,6 @@
 package org.example.microstoreprogetto.ORDERS.service;
 
+import org.aspectj.weaver.ast.Or;
 import org.example.microstoreprogetto.ORDERS.DTO.CreateOrderDTO;
 import org.example.microstoreprogetto.ORDERS.DTO.EditOrdineDTO;
 import org.example.microstoreprogetto.ORDERS.DTO.StandardOrderDTO;
@@ -9,16 +10,19 @@ import org.example.microstoreprogetto.ORDERS.entity.Order_Items;
 import org.example.microstoreprogetto.USERS.entity.Users;
 import org.example.microstoreprogetto.USERS.repository.UserRepository;
 import org.example.microstoreprogetto.util.base_dto.BaseDTO;
+import org.example.microstoreprogetto.util.base_entity.BaseEntity;
 import org.example.microstoreprogetto.util.configuration.CheckCalcoliOrder;
 import org.example.microstoreprogetto.util.configuration.Mapper;
 import org.example.microstoreprogetto.util.enums.statoordine.STATOORDINE;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService implements IOrderService {
@@ -35,7 +39,7 @@ public class OrderService implements IOrderService {
         this.mapper = mapper;
     }
 
-    public BaseDTO creazioneOrdine(CreateOrderDTO orderDTO) {
+    public BaseDTO creazioneOrdine(CreateOrderDTO orderDTO) throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
 
 //        OGGETTO TIPO INVIATO DAL CLIENT:
 //        {
@@ -76,14 +80,18 @@ public class OrderService implements IOrderService {
         ordine.setTotal(orderDTO.getTotal());
 
         //mappare i prodotti dal tipo ProductInfoDTO al tipo Order_items
-        List<Order_Items> listaProd = mapper.MapperToOrderListType(orderDTO.getListaProdotti());
+        List<? extends BaseEntity> listaProd = mapper.MapperToListType(orderDTO.getListaProdotti(), Order_Items.class);
+
+        List<Order_Items> listaProdottiOrderItems = listaProd.stream().map
+                (item ->
+                        (Order_Items) item).toList();
 
 
-        ordine.setOrderItemsList(listaProd);
+        ordine.setOrderItemsList(listaProdottiOrderItems);
         ordine.setUser(user);
         ordine.setCreated_at(currTime);
 
-        for (Order_Items item : listaProd) {
+        for (Order_Items item : listaProdottiOrderItems) {
             item.setOrder(ordine);
         }
 
@@ -145,7 +153,7 @@ public class OrderService implements IOrderService {
     }
 
 
-    public StandardOrderDTO ModificaOrdine(EditOrdineDTO dataOrdine) {
+    public BaseDTO ModificaOrdine(EditOrdineDTO dataOrdine) throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
 
         // controllo esistenze dell ordine
         Optional<Orders> optionalOrder = orderRepository.findById(dataOrdine.getOrderId());
@@ -172,18 +180,23 @@ public class OrderService implements IOrderService {
         checkCalcoliOrder.PrezzoTotProdotti(dataOrdine);
 
         ordine.getOrderItemsList().clear();
-        List<Order_Items> nuovaListaOrdini = mapper.MapperToOrderListType(dataOrdine.getListaProdotti());
+        List<? extends BaseEntity> nuovaListaOrdini = mapper.MapperToListType(dataOrdine.getListaProdotti(), Order_Items.class);
 
-        ordine.getOrderItemsList().addAll(nuovaListaOrdini);
+        List<Order_Items> listaProdottiOrderItems = nuovaListaOrdini.stream().map
+                (item ->
+                        (Order_Items) item).toList();
 
-        for (Order_Items item : nuovaListaOrdini) {
+        ordine.getOrderItemsList().addAll(listaProdottiOrderItems);
+
+        for (Order_Items item : listaProdottiOrderItems) {
             item.setOrder(ordine);
         }
         ordine.setTotal(dataOrdine.getTotal());
         orderRepository.save(ordine);
 
-        Time currentTime = new Time(System.currentTimeMillis());
-        return mapper.mapperOrderDTO(ordine.getId(), ordine.getUser().getName(), ordine.getStatus(), ordine.getTotal(), currentTime);
+        //  Time currentTime = new Time(System.currentTimeMillis());
+        //return mapper.mapperOrderDTO(ordine.getId(), ordine.getUser().getName(), ordine.getStatus(), ordine.getTotal(), currentTime);
+        return mapper.toDTO(ordine, new StandardOrderDTO());
     }
 
 

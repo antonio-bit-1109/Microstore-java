@@ -2,16 +2,9 @@ package org.example.microstoreprogetto.util.configuration;
 
 import org.example.microstoreprogetto.ORDERS.DTO.CreateOrderDTO;
 import org.example.microstoreprogetto.ORDERS.DTO.ProductInfoDTO;
-import org.example.microstoreprogetto.PRODUCTS.repository.ProductRepository;
 import org.example.microstoreprogetto.PRODUCTS.util.UtilityProduct;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class CheckCalcoliOrder {

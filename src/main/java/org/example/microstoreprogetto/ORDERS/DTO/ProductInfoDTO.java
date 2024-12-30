@@ -1,5 +1,7 @@
 package org.example.microstoreprogetto.ORDERS.DTO;
 
+import org.example.microstoreprogetto.util.base_dto.BaseDTO;
+
 public class ProductInfoDTO {
 
     private String idProd;

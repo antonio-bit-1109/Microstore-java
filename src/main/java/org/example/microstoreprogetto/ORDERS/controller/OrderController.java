@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.InvocationTargetException;
+
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -34,9 +36,13 @@ public class OrderController {
             BaseDTO order = this.orderService.creazioneOrdine(orderData);
             return new ResponseEntity<>(new OrderMsgResponse(order, "ordine creato con successo"), HttpStatus.OK);
 
-        } catch (RuntimeException ex) {
-
+        } catch (RuntimeException |
+                 InvocationTargetException |
+                 NoSuchMethodException |
+                 IllegalAccessException |
+                 InstantiationException ex) {
             return new ResponseEntity<>(new OrderMsgResponse(null, "errore durante la creazione dell'ordine: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
     }
 
@@ -47,10 +53,11 @@ public class OrderController {
         try {
 
 
-            StandardOrderDTO orderDTO = orderService.ModificaOrdine(editOrder);
+            BaseDTO orderDTO = orderService.ModificaOrdine(editOrder);
             return new ResponseEntity<>(new OrderMsgResponse(orderDTO, "ordine modificato con successo"), HttpStatus.OK);
 
-        } catch (RuntimeException ex) {
+        } catch (RuntimeException | InvocationTargetException | InstantiationException | IllegalAccessException |
+                 NoSuchMethodException ex) {
 
             return new ResponseEntity<>(new OrderMsgResponse(null, "errore durante la modifica dell'ordine: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 

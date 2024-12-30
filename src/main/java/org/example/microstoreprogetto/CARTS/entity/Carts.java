@@ -1,7 +1,6 @@
 package org.example.microstoreprogetto.CARTS.entity;
 
 import jakarta.persistence.*;
-import org.example.microstoreprogetto.CART_ITEMS.entity.Cart_items;
 import org.example.microstoreprogetto.USERS.entity.Users;
 import org.example.microstoreprogetto.util.base_entity.BaseEntity;
 
@@ -35,10 +34,6 @@ public class Carts extends BaseEntity {
         this.id = id;
     }
 
-//    public void setUser_id(Long user_id) {
-//        this.user_id = user_id;
-//    }
-
     public void setCreated_at(Timestamp created_at) {
         this.created_at = created_at;
     }
@@ -47,11 +42,23 @@ public class Carts extends BaseEntity {
         return id;
     }
 
-//    public Long getUser_id() {
-//        return user_id;
-//    }
-
     public Timestamp getCreated_at() {
         return created_at;
+    }
+
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
+    public List<Cart_items> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(List<Cart_items> cartItems) {
+        this.cartItems = cartItems;
     }
 }

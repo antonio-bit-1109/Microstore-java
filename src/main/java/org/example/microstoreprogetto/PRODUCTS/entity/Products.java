@@ -1,7 +1,7 @@
 package org.example.microstoreprogetto.PRODUCTS.entity;
 
 import jakarta.persistence.*;
-import org.example.microstoreprogetto.CART_ITEMS.entity.Cart_items;
+import org.example.microstoreprogetto.CARTS.entity.Cart_items;
 import org.example.microstoreprogetto.ORDERS.entity.Order_Items;
 import org.example.microstoreprogetto.util.base_entity.BaseEntity;
 
