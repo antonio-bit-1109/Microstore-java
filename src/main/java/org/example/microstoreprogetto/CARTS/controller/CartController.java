@@ -42,18 +42,18 @@ public class CartController {
     }
 
     //  cancella il carrello specificato tramite il suo id
-//    @PutMapping("/delete")
-//    public ResponseEntity<MessageResp> cancellaCarrello(@Valid @RequestBody DeleteCartDTO datiDelete) {
-//        try {
-//
-//            this.cartService.CancellaCarrello(datiDelete);
-//
-//            return new ResponseEntity<>(new MessageResp("carrello cancellato con successo."), HttpStatus.OK);
-//        } catch (RuntimeException ex) {
-//
-//            return new ResponseEntity<>(new MessageResp("errore durante la cancellazione del carrello selezionato: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @PutMapping("/delete")
+    public ResponseEntity<MessageResp> cancellaCarrello(@Valid @RequestBody DeleteCartDTO datiDelete) {
+        try {
+
+            this.cartService.CancellaCarrello(datiDelete);
+
+            return new ResponseEntity<>(new MessageResp("carrello cancellato con successo."), HttpStatus.OK);
+        } catch (RuntimeException ex) {
+
+            return new ResponseEntity<>(new MessageResp("errore durante la cancellazione del carrello selezionato: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 //
 //    // trova lo specifico carrello tramite id
 //    @GetMapping("/get/{id}")
