@@ -2,6 +2,8 @@ package org.example.microstoreprogetto.util.configuration;
 
 
 import org.example.microstoreprogetto.CARTS.DTO.StandardCartDTO;
+import org.example.microstoreprogetto.CARTS.DTO.getCart.CartGET_DTO;
+import org.example.microstoreprogetto.CARTS.DTO.getCart.CartItemsDTO;
 import org.example.microstoreprogetto.CARTS.entity.Cart_items;
 import org.example.microstoreprogetto.CARTS.entity.Carts;
 import org.example.microstoreprogetto.ORDERS.DTO.ProductInfoDTO;
@@ -38,7 +40,7 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity> {
         this.productRepository = productRepository;
         //  this.methodValidationPostProcessor = methodValidationPostProcessor;
     }
-    
+
 
     // serve per creare gli oggetti Order_items, ovvero la lista dei prodotti presenti nell 'ordine
     public List<? extends BaseEntity> MapperToListType(
@@ -219,4 +221,32 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity> {
         }
     }
 
+
+    public CartGET_DTO CastEntityToGETCART_dto(Carts carrello) {
+        CartGET_DTO cartDataDTO = new CartGET_DTO();
+
+        cartDataDTO.setIdCarrello(carrello.getId());
+        cartDataDTO.setCreatedAt(carrello.getCreated_at().toString());
+        cartDataDTO.setOwner(carrello.getUser().getName());
+
+        for (Cart_items item : carrello.getCartItems()) {
+
+            CartItemsDTO itemDTO = new CartItemsDTO();
+            
+            itemDTO.setIdProdotto(item.getProduct().getId());
+
+            StandardProductDTO prodDTO = new StandardProductDTO(
+                    item.getProduct().getName(),
+                    item.getProduct().getCategory(),
+                    Float.toString(item.getProduct().getPrice()),
+                    item.getProduct().getDescription(),
+                    Integer.toString(item.getProduct().getStock()),
+                    item.getProduct().getIs_active().toString()
+            );
+            itemDTO.setProdotto(prodDTO);
+            cartDataDTO.AddToListaProdotti(itemDTO);
+        }
+
+        return cartDataDTO;
+    }
 }

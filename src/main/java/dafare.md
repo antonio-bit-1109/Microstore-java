@@ -31,3 +31,5 @@
 -[] devi castare qualcosa a Users altrimenti ricevi l'allocazione di memoria invece dei dati effettivi dello users ???
 -[] controlla e risolvi problema del carrello infinito-gigamega - struttura per bene i DTOs in modo da mappare per bene
 le risposte ottenute.
+
+-[] fai get e get-all di ordini e carrelli.

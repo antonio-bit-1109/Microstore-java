@@ -3,6 +3,7 @@ package org.example.microstoreprogetto.CARTS.service;
 import org.example.microstoreprogetto.CARTS.DTO.CreateCarrelloDTO;
 import org.example.microstoreprogetto.CARTS.DTO.DeleteCartDTO;
 import org.example.microstoreprogetto.CARTS.DTO.StandardCartDTO;
+import org.example.microstoreprogetto.CARTS.DTO.getCart.CartGET_DTO;
 import org.example.microstoreprogetto.CARTS.entity.Cart_items;
 import org.example.microstoreprogetto.CARTS.entity.Carts;
 import org.example.microstoreprogetto.CARTS.repository.CartRepository;
@@ -103,6 +104,20 @@ public class CartService implements ICartService {
         }
 
         this.cartRepository.delete(carrello);
-      
+
+    }
+
+    public CartGET_DTO GetCarrello(Long idCart) {
+
+        Optional<Carts> optCart = cartRepository.findById(idCart);
+
+        if (optCart.isEmpty()) {
+            throw new RuntimeException("il carrello selezionato non esiste.");
+        }
+
+        Carts carrello = optCart.get();
+
+        // return this.mapper.toDTO(carrello, new StandardCartDTO());
+        return this.mapper.CastEntityToGETCART_dto(carrello);
     }
 }
