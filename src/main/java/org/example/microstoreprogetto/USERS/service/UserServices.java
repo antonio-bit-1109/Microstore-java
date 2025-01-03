@@ -6,13 +6,11 @@ import org.example.microstoreprogetto.USERS.DTO.StandardUserDTO;
 import org.example.microstoreprogetto.USERS.entity.Users;
 import org.example.microstoreprogetto.USERS.repository.UserRepository;
 import org.example.microstoreprogetto.util.base_dto.BaseDTO;
-import org.example.microstoreprogetto.util.configuration.Mapper;
-import org.example.microstoreprogetto.util.generateJWTtoken.JwtUtil;
+import org.example.microstoreprogetto.util.configuration.mapperutils.Mapper;
 import org.example.microstoreprogetto.util.enums.roles.ROLES;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;

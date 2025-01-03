@@ -1,29 +1,26 @@
-package org.example.microstoreprogetto.util.configuration;
+package org.example.microstoreprogetto.util.configuration.mapperutils;
 
 
-import org.example.microstoreprogetto.CARTS.DTO.StandardCartDTO;
 import org.example.microstoreprogetto.CARTS.DTO.getCart.CartGET_DTO;
 import org.example.microstoreprogetto.CARTS.DTO.getCart.CartItemsDTO;
 import org.example.microstoreprogetto.CARTS.entity.Cart_items;
 import org.example.microstoreprogetto.CARTS.entity.Carts;
 import org.example.microstoreprogetto.ORDERS.DTO.ProductInfoDTO;
-import org.example.microstoreprogetto.ORDERS.DTO.StandardOrderDTO;
+import org.example.microstoreprogetto.ORDERS.DTO.getOrder.OrderGET_DTO;
+import org.example.microstoreprogetto.ORDERS.DTO.getOrder.OrderItemsDTO;
 import org.example.microstoreprogetto.ORDERS.entity.Order_Items;
+import org.example.microstoreprogetto.ORDERS.entity.Orders;
 import org.example.microstoreprogetto.PRODUCTS.DTO.StandardProductDTO;
 import org.example.microstoreprogetto.PRODUCTS.entity.Products;
 import org.example.microstoreprogetto.PRODUCTS.repository.ProductRepository;
-import org.example.microstoreprogetto.USERS.DTO.StandardUserDTO;
 import org.example.microstoreprogetto.USERS.entity.Users;
 import org.example.microstoreprogetto.util.base_dto.BaseDTO;
+import org.example.microstoreprogetto.util.base_dto.BasedDTO_GET;
 import org.example.microstoreprogetto.util.base_entity.BaseEntity;
-import org.example.microstoreprogetto.util.configuration.mapperinterface.GenericMapper;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.Time;
 import java.util.*;
 
 
@@ -31,7 +28,7 @@ import java.util.*;
 
 //prodotto qui dentro e lo ritorno, pronto per essere ritornato, gia con tutti i valori settati.
 @Component
-public class Mapper implements GenericMapper<BaseDTO, BaseEntity> {
+public class Mapper implements GenericMapper<BaseDTO, BaseEntity, BasedDTO_GET> {
 
     private final ProductRepository productRepository;
     //private final MethodValidationPostProcessor methodValidationPostProcessor;
@@ -222,7 +219,9 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity> {
     }
 
 
-    public CartGET_DTO CastEntityToGETCART_dto(Carts carrello) {
+    // metodo per castare alla DTO che ritorna un cart da inviare al client
+    // stesso anche per order GET DTO ??
+    private CartGET_DTO CastEntityToGETCART_dto(Carts carrello) {
         CartGET_DTO cartDataDTO = new CartGET_DTO();
 
         cartDataDTO.setIdCarrello(carrello.getId());
@@ -232,7 +231,7 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity> {
         for (Cart_items item : carrello.getCartItems()) {
 
             CartItemsDTO itemDTO = new CartItemsDTO();
-            
+
             itemDTO.setIdProdotto(item.getProduct().getId());
 
             StandardProductDTO prodDTO = new StandardProductDTO(
@@ -249,4 +248,49 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity> {
 
         return cartDataDTO;
     }
+
+    private OrderGET_DTO CastEntityToGETORDER_dto(Orders ordine) {
+        OrderGET_DTO orderDataDTO = new OrderGET_DTO();
+
+        orderDataDTO.setIdOrdine(ordine.getId());
+        orderDataDTO.setTotal(ordine.getTotal().toString());
+        orderDataDTO.setOwner(ordine.getUser().getName());
+        orderDataDTO.setStatus(ordine.getStatus());
+
+        for (Order_Items item : ordine.getOrderItemsList()) {
+            OrderItemsDTO itemDTO = new OrderItemsDTO();
+            itemDTO.setIdProdotto(item.getProduct().getId());
+
+            StandardProductDTO prodDTO = new StandardProductDTO(
+                    item.getProduct().getName(),
+                    item.getProduct().getCategory(),
+                    Float.toString(item.getProduct().getPrice()),
+                    item.getProduct().getDescription(),
+                    Integer.toString(item.getProduct().getStock()),
+                    item.getProduct().getIs_active().toString());
+
+            itemDTO.setProdotto(prodDTO);
+            orderDataDTO.AddToListaProdotti(itemDTO);
+        }
+
+        return orderDataDTO;
+    }
+
+    // metodo di switch per capire quale sia l entità che sta arrivando, se Carts od Orders
+    // e creare una DTO specifica da ritornare al client.
+    @Override
+    public BasedDTO_GET GeneralMethodToCastEntityToGetDTO(BaseEntity entity) {
+
+        // controllo di che tipo è l'entity passata
+        if (entity instanceof Carts) {
+            return CastEntityToGETCART_dto((Carts) entity);
+        }
+
+        if (entity instanceof Orders) {
+            return CastEntityToGETORDER_dto((Orders) entity);
+        }
+
+        throw new RuntimeException("le entità passate non possono essere trasformate in entità specifiche.");
+    }
+
 }

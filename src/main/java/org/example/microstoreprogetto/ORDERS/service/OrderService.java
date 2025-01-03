@@ -1,28 +1,29 @@
 package org.example.microstoreprogetto.ORDERS.service;
 
-import org.aspectj.weaver.ast.Or;
+import org.example.microstoreprogetto.CARTS.entity.Carts;
 import org.example.microstoreprogetto.ORDERS.DTO.CreateOrderDTO;
 import org.example.microstoreprogetto.ORDERS.DTO.EditOrdineDTO;
 import org.example.microstoreprogetto.ORDERS.DTO.StandardOrderDTO;
+import org.example.microstoreprogetto.ORDERS.DTO.getOrder.OrderGET_DTO;
 import org.example.microstoreprogetto.ORDERS.entity.Orders;
 import org.example.microstoreprogetto.ORDERS.repository.OrderRepository;
 import org.example.microstoreprogetto.ORDERS.entity.Order_Items;
 import org.example.microstoreprogetto.USERS.entity.Users;
 import org.example.microstoreprogetto.USERS.repository.UserRepository;
 import org.example.microstoreprogetto.util.base_dto.BaseDTO;
+import org.example.microstoreprogetto.util.base_dto.BasedDTO_GET;
 import org.example.microstoreprogetto.util.base_entity.BaseEntity;
 import org.example.microstoreprogetto.util.configuration.CheckCalcoliOrder;
-import org.example.microstoreprogetto.util.configuration.Mapper;
+import org.example.microstoreprogetto.util.configuration.mapperutils.Mapper;
 import org.example.microstoreprogetto.util.enums.statoordine.STATOORDINE;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService implements IOrderService {
@@ -200,4 +201,59 @@ public class OrderService implements IOrderService {
     }
 
 
+    public BasedDTO_GET GetSingoloOrdine(Long idOrdine) {
+
+        Optional<Orders> OptOrder = this.orderRepository.findById(idOrdine);
+
+        if (OptOrder.isEmpty()) {
+            throw new RuntimeException("ordine selezionato non esiste.");
+        }
+
+        Orders order = OptOrder.get();
+        return this.mapper.GeneralMethodToCastEntityToGetDTO(order);
+
+    }
+
+    public List<BasedDTO_GET> GetAllOrdiniUtente(Long idUser) {
+        Optional<Users> utenteOpt = userRepository.findById(idUser);
+
+        if (utenteOpt.isEmpty()) {
+            throw new RuntimeException("utente selezionato non esiste.");
+        }
+
+        Users utente = utenteOpt.get();
+
+        List<Optional<Orders>> listaOrdersOpt = this.orderRepository.findOrdersByUser((utente));
+
+        if (listaOrdersOpt.isEmpty()) {
+            throw new RuntimeException("nessun ordine da mostrare.");
+        }
+
+
+        // se il singolo elemento all interno dell'optional esiste,
+        // allora lo pusho dentro una lista di entity Carts.
+        List<Orders> listaOrdiniUtente = new ArrayList<>();
+
+        List<BasedDTO_GET> listaOrdiniDTO = new ArrayList<>();
+
+        // aggiungo l 'elemento all interno della lista di Carts
+        for (Optional<Orders> carrItem : listaOrdersOpt) {
+
+            if (carrItem.isPresent()) {
+                listaOrdiniUtente.add(carrItem.get());
+            }
+
+        }
+
+        // ciclo la lista di Carts e passo ogni oggetto ad un mapper che ritorna un oggetto CartGet_DTO
+        // che pusho in listaCarrelloDTO
+        // che poi ritorno al controller
+        for (Orders order : listaOrdiniUtente) {
+
+            BasedDTO_GET cartDTO = this.mapper.GeneralMethodToCastEntityToGetDTO(order);
+            listaOrdiniDTO.add(cartDTO);
+        }
+
+        return listaOrdiniDTO;
+    }
 }

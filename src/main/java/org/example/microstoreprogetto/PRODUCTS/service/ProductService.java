@@ -6,7 +6,7 @@ import org.example.microstoreprogetto.PRODUCTS.DTO.StandardProductDTO;
 import org.example.microstoreprogetto.PRODUCTS.entity.Products;
 import org.example.microstoreprogetto.PRODUCTS.repository.ProductRepository;
 import org.example.microstoreprogetto.util.base_dto.BaseDTO;
-import org.example.microstoreprogetto.util.configuration.Mapper;
+import org.example.microstoreprogetto.util.configuration.mapperutils.Mapper;
 import org.example.microstoreprogetto.util.enums.categoryproduct.CategoryProduct;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService implements IProductService {

@@ -1,9 +1,11 @@
 package org.example.microstoreprogetto.CARTS.DTO.getCart;
 
+import org.example.microstoreprogetto.util.base_dto.BasedDTO_GET;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartGET_DTO {
+public class CartGET_DTO extends BasedDTO_GET {
 
     private Long idCarrello;
     private String createdAt;

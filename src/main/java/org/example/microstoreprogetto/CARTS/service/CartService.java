@@ -2,23 +2,22 @@ package org.example.microstoreprogetto.CARTS.service;
 
 import org.example.microstoreprogetto.CARTS.DTO.CreateCarrelloDTO;
 import org.example.microstoreprogetto.CARTS.DTO.DeleteCartDTO;
-import org.example.microstoreprogetto.CARTS.DTO.StandardCartDTO;
 import org.example.microstoreprogetto.CARTS.DTO.getCart.CartGET_DTO;
 import org.example.microstoreprogetto.CARTS.entity.Cart_items;
 import org.example.microstoreprogetto.CARTS.entity.Carts;
 import org.example.microstoreprogetto.CARTS.repository.CartRepository;
 import org.example.microstoreprogetto.ORDERS.DTO.ProductInfoDTO;
-import org.example.microstoreprogetto.ORDERS.entity.Order_Items;
 import org.example.microstoreprogetto.PRODUCTS.util.UtilityProduct;
 import org.example.microstoreprogetto.USERS.entity.Users;
 import org.example.microstoreprogetto.USERS.repository.UserRepository;
-import org.example.microstoreprogetto.util.base_dto.BaseDTO;
+import org.example.microstoreprogetto.util.base_dto.BasedDTO_GET;
 import org.example.microstoreprogetto.util.base_entity.BaseEntity;
-import org.example.microstoreprogetto.util.configuration.Mapper;
+import org.example.microstoreprogetto.util.configuration.mapperutils.Mapper;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -107,7 +106,7 @@ public class CartService implements ICartService {
 
     }
 
-    public CartGET_DTO GetCarrello(Long idCart) {
+    public BasedDTO_GET GetCarrello(Long idCart) {
 
         Optional<Carts> optCart = cartRepository.findById(idCart);
 
@@ -118,6 +117,51 @@ public class CartService implements ICartService {
         Carts carrello = optCart.get();
 
         // return this.mapper.toDTO(carrello, new StandardCartDTO());
-        return this.mapper.CastEntityToGETCART_dto(carrello);
+        return this.mapper.GeneralMethodToCastEntityToGetDTO(carrello);
+    }
+
+    // i'm taking all the user's carts.
+    public List<BasedDTO_GET> GetCarrelliUtente(Long idUser) {
+
+        Optional<Users> utenteOpt = userRepository.findById(idUser);
+
+        if (utenteOpt.isEmpty()) {
+            throw new RuntimeException("utente selezionato non esiste.");
+        }
+
+        Users utente = utenteOpt.get();
+
+        List<Optional<Carts>> listaCarrOpt = this.cartRepository.findCartsByUser(utente);
+
+        if (listaCarrOpt.isEmpty()) {
+            throw new RuntimeException("nessun carrello da mostrare.");
+        }
+
+
+        // se il singolo elemento all interno dell'optional esiste,
+        // allora lo pusho dentro una lista di entity Carts.
+        List<Carts> listaCarrelliUtente = new ArrayList<>();
+        List<BasedDTO_GET> listaCarrelliDTO = new ArrayList<>();
+
+        // aggiungo l 'elemento all interno della lista di Carts
+        for (Optional<Carts> carrItem : listaCarrOpt) {
+
+            if (carrItem.isPresent()) {
+                listaCarrelliUtente.add(carrItem.get());
+            }
+
+        }
+
+        // ciclo la lista di Carts e passo ogni oggetto ad un mapper che ritorna un oggetto CartGet_DTO
+        // che pusho in listaCarrelloDTO
+        // che poi ritorno al controller
+        for (Carts cart : listaCarrelliUtente) {
+
+            BasedDTO_GET cartDTO = this.mapper.GeneralMethodToCastEntityToGetDTO(cart);
+            listaCarrelliDTO.add(cartDTO);
+        }
+
+        return listaCarrelliDTO;
+
     }
 }

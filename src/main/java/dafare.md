@@ -33,3 +33,5 @@
 le risposte ottenute.
 
 -[] fai get e get-all di ordini e carrelli.
+-[] controllare tramite Token se l'utente che fa le get è autorizzato a vedere quel carrello
+(se utente possessore del carrello possiede lo stesso id salvato nel token)

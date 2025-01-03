@@ -10,7 +10,9 @@ import org.example.microstoreprogetto.CARTS.DTO.getCart.CartGET_DTO;
 import org.example.microstoreprogetto.CARTS.service.CartService;
 import org.example.microstoreprogetto.ORDERS.DTO.CreateOrderDTO;
 import org.example.microstoreprogetto.util.base_dto.BaseDTO;
+import org.example.microstoreprogetto.util.base_dto.BasedDTO_GET;
 import org.example.microstoreprogetto.util.customResponse.cart.CartMsgDTO;
+import org.example.microstoreprogetto.util.customResponse.cart.ListAllCartMsg;
 import org.example.microstoreprogetto.util.customResponse.general.MessageResp;
 import org.example.microstoreprogetto.util.customResponse.order.OrderMsgResponse;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/cart")
@@ -60,11 +63,16 @@ public class CartController {
 
     // trova lo specifico carrello tramite id
     @GetMapping("/get/{idCart}")
-    public ResponseEntity<CartMsgDTO> TrovaCarrello(@NotNull @PathVariable Long idCart) {
+    public ResponseEntity<CartMsgDTO> TrovaCarrello(@PathVariable Long idCart) {
         try {
 
-            CartGET_DTO cartDTO = this.cartService.GetCarrello(idCart);
-            return new ResponseEntity<>(new CartMsgDTO(cartDTO, "carrello reperito con successo."), HttpStatus.INTERNAL_SERVER_ERROR);
+            if (idCart == null) {
+                throw new RuntimeException("nessun id carrello fornito. Contattare Assistenza.");
+
+            }
+
+            BasedDTO_GET cartDTO = this.cartService.GetCarrello(idCart);
+            return new ResponseEntity<>(new CartMsgDTO(cartDTO, "carrello reperito con successo."), HttpStatus.OK);
 
         } catch (RuntimeException ex) {
             return new ResponseEntity<>(new CartMsgDTO(null, "errore durante il reperimento del carrello.: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -74,14 +82,19 @@ public class CartController {
 
     // trova tutti i carrelli dell utente selezionato.
     @GetMapping("/get-all/{idUser}")
-    public ResponseEntity<MessageResp> TrovaTuttiCarrelli() {
+    public ResponseEntity<ListAllCartMsg> TrovaTuttiCarrelli(@PathVariable Long idUser) {
         try {
 
-            CartGET_DTO cartDTO = this.cartService.GetCarrello(idCart);
-            return new ResponseEntity<>(new CartMsgDTO(cartDTO, "carrello reperito con successo."), HttpStatus.INTERNAL_SERVER_ERROR);
+            if (idUser == null || idUser <= 0) {
+                throw new RuntimeException("nessun id utente fornito. Contattare Assistenza.");
+
+            }
+
+            List<BasedDTO_GET> listaCarrelliDTO = this.cartService.GetCarrelliUtente(idUser);
+            return new ResponseEntity<>(new ListAllCartMsg(listaCarrelliDTO, "carrelli ottenuti con successo."), HttpStatus.OK);
 
         } catch (RuntimeException ex) {
-            return new ResponseEntity<>(new CartMsgDTO(null, "errore durante il reperimento del carrello.: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new ListAllCartMsg(null, "errore durante il reperimento del carrello.: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
