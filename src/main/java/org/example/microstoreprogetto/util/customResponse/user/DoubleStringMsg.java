@@ -1,25 +1,28 @@
 package org.example.microstoreprogetto.util.customResponse.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class DoubleStringMsg {
 
-    private String msg1;
+    private String message;
+
     private String token;
 
-    public void setMsg1(String msg1) {
-        this.msg1 = msg1;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public void setMsg2(String msg2) {
+    public void setToken(String msg2) {
         this.token = msg2;
     }
 
     public DoubleStringMsg(String m1, String m2) {
-        setMsg1(m1);
-        setMsg2(m2);
+        setMessage(m1);
+        setToken(m2);
     }
 
-    public String getMsg1() {
-        return msg1;
+    public String getMessage() {
+        return message;
     }
 
     public String getToken() {
