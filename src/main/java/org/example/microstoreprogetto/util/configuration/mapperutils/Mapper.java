@@ -165,6 +165,13 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity, BasedDTO_GET> 
 
                         }
 
+                        // se il valore preso dal get del metodo è un long lo salvo come tale nella mappa
+                        // e non lo casto a string
+                        if (ValueMetodo instanceof Long) {
+                            mappaMetodiGetEntity.put(metodo.getName(), ValueMetodo);
+                            continue;
+                        }
+
                         mappaMetodiGetEntity.put(metodo.getName(), ValueMetodo.toString());
 
 
@@ -235,12 +242,14 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity, BasedDTO_GET> 
             itemDTO.setIdProdotto(item.getProduct().getId());
 
             StandardProductDTO prodDTO = new StandardProductDTO(
+                    item.getProduct().getId(),
                     item.getProduct().getName(),
                     item.getProduct().getCategory(),
                     Float.toString(item.getProduct().getPrice()),
                     item.getProduct().getDescription(),
                     Integer.toString(item.getProduct().getStock()),
-                    item.getProduct().getIs_active().toString()
+                    item.getProduct().getIs_active().toString(),
+                    item.getProduct().getImage_url()
             );
             itemDTO.setProdotto(prodDTO);
             cartDataDTO.AddToListaProdotti(itemDTO);
@@ -262,12 +271,14 @@ public class Mapper implements GenericMapper<BaseDTO, BaseEntity, BasedDTO_GET> 
             itemDTO.setIdProdotto(item.getProduct().getId());
 
             StandardProductDTO prodDTO = new StandardProductDTO(
+                    item.getProduct().getId(),
                     item.getProduct().getName(),
                     item.getProduct().getCategory(),
                     Float.toString(item.getProduct().getPrice()),
                     item.getProduct().getDescription(),
                     Integer.toString(item.getProduct().getStock()),
-                    item.getProduct().getIs_active().toString());
+                    item.getProduct().getIs_active().toString(),
+                    item.getProduct().getImage_url());
 
             itemDTO.setProdotto(prodDTO);
             orderDataDTO.AddToListaProdotti(itemDTO);

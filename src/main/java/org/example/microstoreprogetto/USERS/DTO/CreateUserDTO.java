@@ -18,7 +18,7 @@ public class CreateUserDTO {
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "Email should be valid")
     private String email;
 
-    //    private String role;
+    //private String role;
     @Size(min = 10, max = 10, message = "Il numero di telefono deve essere lungo esattamente 10 caratteri.")
     private String phone;
 
@@ -45,10 +45,6 @@ public class CreateUserDTO {
     public String getPhone() {
         return phone;
     }
-
-//    public String getRole() {
-//        return role;
-//    }
 
     public String getEmail() {
         return email;

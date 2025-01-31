@@ -45,7 +45,7 @@ public class SecurityConfiguration {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:5173")); // Cambia con l'URL del tuo frontend
+                    config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:4202")); // Cambia con l'URL del tuo frontend
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setAllowCredentials(true);
@@ -55,6 +55,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/auth/login", "/users/register").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
+//                        .anyRequest().permitAll())
                 .addFilterBefore(new JWTAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

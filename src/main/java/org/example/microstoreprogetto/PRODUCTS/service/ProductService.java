@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class ProductService implements IProductService {
@@ -26,26 +27,41 @@ public class ProductService implements IProductService {
         this.mapper = mapper;
     }
 
+
     public void productCreation(CreateProductDTO prodotto) {
 
         try {
 
             Timestamp currentTime = new Timestamp(System.currentTimeMillis());
             Products prod = new Products();
-
+            Random random = new Random();
             //se esiste gia un prodotto con caratteristiche simili evito la creazione
             if (productRepository.findByName(prodotto.normalizedName()) != 0) {
                 throw new RuntimeException("questo prodotto esiste già. Se vuoi puoi modificare le quantità.");
             }
 
+            int n = random.nextInt(3);
 
             prod.setName(prodotto.normalizedName());
             prod.setDescription(prodotto.getDescription());
-            prod.setCategory(CategoryProduct.GENERAL.getDescrizione());
+            switch (n) {
+
+                case 1:
+                    prod.setCategory(CategoryProduct.FOOD.getDescrizione());
+                    break;
+                case 2:
+                    prod.setCategory(CategoryProduct.WEAPON.getDescrizione());
+                    break;
+                default:
+                    prod.setCategory(CategoryProduct.GENERAL.getDescrizione());
+                    break;
+            }
+//            prod.setCategory(CategoryProduct.GENERAL.getDescrizione());
             prod.setStock(1);
             prod.setPrice(prodotto.getPrice());
             prod.setCreated_at(currentTime);
             prod.setIs_active(true);
+            prod.setImage_url(prodotto.getImage_url());
 
             productRepository.save(prod);
 

@@ -23,6 +23,7 @@ public class Products extends BaseEntity {
     private Integer stock;
     private Timestamp created_at;
     private Boolean is_active;
+    private String image_url;
 
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -59,6 +60,10 @@ public class Products extends BaseEntity {
         this.created_at = created_at;
     }
 
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
     public Long getId() {
         return id;
     }
@@ -93,5 +98,9 @@ public class Products extends BaseEntity {
 
     public Boolean getIs_active() {
         return is_active;
+    }
+
+    public String getImage_url() {
+        return image_url;
     }
 }

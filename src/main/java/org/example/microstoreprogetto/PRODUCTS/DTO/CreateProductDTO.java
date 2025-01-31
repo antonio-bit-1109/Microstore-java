@@ -13,10 +13,13 @@ public class CreateProductDTO {
     @NotNull(message = "prezzo obbligatorio")
     private Float price;
 
-//    private String category;
+    @NotNull(message = "URL immagine obbligatorio")
+    private String image_url;
 
-//    private Integer Stock;
 
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -30,13 +33,9 @@ public class CreateProductDTO {
         this.price = price;
     }
 
-//    public void setStock(Integer stock) {
-//        Stock = stock;
-//    }
-
-//    public void setCategory(String category) {
-//        this.category = category;
-//    }
+    public String getImage_url() {
+        return image_url;
+    }
 
     public String getName() {
         return name;
