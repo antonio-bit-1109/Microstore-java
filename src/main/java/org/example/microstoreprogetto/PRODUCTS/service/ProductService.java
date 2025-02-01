@@ -45,7 +45,6 @@ public class ProductService implements IProductService {
             prod.setName(prodotto.normalizedName());
             prod.setDescription(prodotto.getDescription());
             switch (n) {
-
                 case 1:
                     prod.setCategory(CategoryProduct.FOOD.getDescrizione());
                     break;
