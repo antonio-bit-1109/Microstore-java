@@ -3,6 +3,7 @@ package org.example.microstoreprogetto.CARTS.controller;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.aspectj.bridge.Message;
+import org.example.microstoreprogetto.CARTS.DTO.AddProdTCartExistedDTO;
 import org.example.microstoreprogetto.CARTS.DTO.CreateCarrelloDTO;
 import org.example.microstoreprogetto.CARTS.DTO.DeleteCartDTO;
 import org.example.microstoreprogetto.CARTS.DTO.StandardCartDTO;
@@ -32,6 +33,7 @@ public class CartController {
         this.cartService = cartService;
     }
 
+    // creazione nuovo carrello
     @PostMapping("/create-new")
     public ResponseEntity<MessageResp> creazioneNuovoCarrello(@Valid @RequestBody CreateCarrelloDTO carrelloData) {
         try {
@@ -45,6 +47,21 @@ public class CartController {
             return new ResponseEntity<>(new MessageResp("errore durante il salvataggio del carrello: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+    // aggiungere prodotti ad un carrello già esistente
+//    @PostMapping("/addProductToCart")
+//    public ResponseEntity<MessageResp> aggiungiProdACarrelloEsistente(@Valid AddProdTCartExistedDTO datiAggiuntaProdotti) {
+//
+//        try {
+//
+//            this.cartService.AddToAlreadyExistedCart(datiAggiuntaProdotti);
+//
+//        } catch (RuntimeException ex) {
+//            return new ResponseEntity<>(new MessageResp("Errore durante aggiunta prodotti al carrello:" + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
 
     //  cancella il carrello specificato tramite il suo id
     @PutMapping("/delete")

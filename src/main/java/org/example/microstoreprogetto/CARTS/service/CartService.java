@@ -1,5 +1,6 @@
 package org.example.microstoreprogetto.CARTS.service;
 
+
 import org.example.microstoreprogetto.CARTS.DTO.CreateCarrelloDTO;
 import org.example.microstoreprogetto.CARTS.DTO.DeleteCartDTO;
 import org.example.microstoreprogetto.CARTS.DTO.getCart.CartGET_DTO;
@@ -164,4 +165,26 @@ public class CartService implements ICartService {
         return listaCarrelliDTO;
 
     }
+
+//    public Void AddToAlreadyExistedCart(AddProdTCartExistedDTO datiAggiuntaProdotto) {
+//
+//        Optional<Carts> carrelloOpt = cartRepository.findById(datiAggiuntaProdotto.getIdCarrello());
+//
+//        if (carrelloOpt.isEmpty()) {
+//            throw new RuntimeException("impossibile trovare il carrello specificato.");
+//        }
+//
+//        Carts carrello = carrelloOpt.get();
+//
+//        if (!(carrello.getUser().getId().equals(datiAggiuntaProdotto.getIdUser()))) {
+//
+//            throw new RuntimeException("L'utente associato al carrello non risulta essere lo stesso. ERRORE!");
+//
+//        } else {
+//
+//
+//        }
+//
+//
+//    }
 }

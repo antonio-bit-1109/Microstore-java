@@ -106,4 +106,15 @@ public class ProductController {
             return new ResponseEntity<>(new AllProductsAndMsg(null, "Errore durante la get di tutti i prodotti : " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/returnActive/{id}")
+    public ResponseEntity<MessageResp> reactivateProduct(@NotNull @PathVariable Long id) {
+        try {
+            this.productService.reimpostaActive(id);
+            return new ResponseEntity<>(new MessageResp("prodotto riattivato con successo."), HttpStatus.OK);
+
+        } catch (RuntimeException ex) {
+            return new ResponseEntity<>(new MessageResp("errore durante la riattivazione del prodotto selezionato:" + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

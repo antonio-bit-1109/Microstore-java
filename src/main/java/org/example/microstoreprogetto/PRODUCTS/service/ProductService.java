@@ -144,4 +144,22 @@ public class ProductService implements IProductService {
         return listaProdDTO;
 
     }
+
+    public void reimpostaActive(Long id) {
+
+        Optional<Products> prodottoOptional = this.productRepository.findById(id);
+
+        if (prodottoOptional.isEmpty()) {
+            throw new RuntimeException("impossibile trovare prodotto con id specificato.");
+        }
+
+        Products prodotto = prodottoOptional.get();
+
+        if (prodotto.getIs_active()) {
+            throw new RuntimeException(("il prodotto è già impostato come visualizzabile"));
+        }
+
+        prodotto.setIs_active(true);
+        productRepository.save(prodotto);
+    }
 }
