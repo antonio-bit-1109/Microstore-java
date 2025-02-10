@@ -27,20 +27,8 @@ public class SecurityConfiguration {
         this.jwtUtil = jwtUtil;
     }
 
-    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http.csrf(csrf -> csrf.disable())
-//                .authorizeHttpRequests(auth -> auth
-//
-//                        .requestMatchers("/auth/login", "/users/register").permitAll()
-//                        .requestMatchers("/admin/**").hasRole("ADMIN") // questo dovrebbe essere il valore salvato nel token, controlla anche se maiuscolo o minuscolo
-//                        .anyRequest().authenticated())
-//                //   .anyRequest().permitAll())
-//                .addFilterBefore(new JWTAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
-//
-//        return http.build();
-//    }
 
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(request -> {
@@ -68,19 +56,4 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-
-    // oggetto per configurare le opzioni cors per accettare richieste da specifici client
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer() {
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/**")
-//                        .allowedOrigins("http://localhost:5173")
-//                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-//                        .allowedHeaders("*")
-//                        .allowCredentials(true);
-//            }
-//        };
-//    }
 }

@@ -71,26 +71,4 @@ public class JwtUtil {
             return null;
         }
     }
-
-//    public Map<String, String> validateToken(String token) {
-//        try {
-//
-//            var claims = Jwts.parserBuilder()
-//                    .setSigningKey(key)
-//                    .build()
-//                    .parseClaimsJws(token)
-//                    .getBody();
-////                    .getSubject();
-//            //            String role = claims.get("role", String.class);
-////
-//            HashMap<String, String> resultClaim = new HashMap<>();
-//            resultClaim.put("username", claims.getSubject());
-//            // resultClaim.put("role", role);
-//            //  return claims.getSubject();
-//            return resultClaim;
-//
-//        } catch (JwtException | IllegalArgumentException e) {
-//            return null;
-//        }
-//    }
 }
